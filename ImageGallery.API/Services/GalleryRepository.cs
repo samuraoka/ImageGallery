@@ -15,10 +15,19 @@ namespace ImageGallery.API
             context = galleryContext;
         }
 
+        // TODO
+
+        public Image GetImage(Guid id)
+        {
+            return context.Images.FirstOrDefault(i => i.Id == id);
+        }
+
         public IEnumerable<Image> GetImages()
         {
             return context.Images.OrderBy(i => i.Title).ToList();
         }
+
+        // TODO
 
         public void Dispose()
         {
@@ -32,7 +41,8 @@ namespace ImageGallery.API
             {
                 if (context != null)
                 {
-
+                    context.Dispose();
+                    context = null;
                 }
             }
         }
