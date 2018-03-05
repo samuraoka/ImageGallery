@@ -166,5 +166,23 @@ namespace ImageGallery.API.Test.Services
             // Assert
             Assert.False(isExist);
         }
+
+        [Fact]
+        public void CouldAddImage()
+        {
+            // Arrange
+            var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
+            var image = new Image
+            {
+                Id = Guid.NewGuid(),
+                Title = "New Title",
+                FileName = "NewFileName.jpg",
+                OwnerId = "NewOwnerId",
+            };
+
+            // Act
+            // It's OK, if no exception is raised.
+            repo.AddImage(image);
+        }
     }
 }

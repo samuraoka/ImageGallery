@@ -30,6 +30,11 @@ namespace ImageGallery.API
             return context.Images.OrderBy(i => i.Title).ToList();
         }
 
+        public void AddImage(Image image)
+        {
+            context.Images.Add(image);
+        }
+
         // TODO
 
         public void Dispose()
