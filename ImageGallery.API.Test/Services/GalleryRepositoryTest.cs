@@ -27,5 +27,18 @@ namespace ImageGallery.API.Test.Services
             Assert.NotNull(repo);
             Assert.IsAssignableFrom<IGalleryRepository>(repo);
         }
+
+        [Fact]
+        public void CouldGetImages()
+        {
+            // Arrange
+            var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
+
+            // Act
+            var images = repo.GetImages();
+
+            // Assert
+            Assert.NotNull(images);
+        }
     }
 }
