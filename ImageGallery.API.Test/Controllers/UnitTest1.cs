@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ImageGallery.API.Test
+namespace ImageGallery.API.Test.Controllers
 {
     public class UnitTest1
     {

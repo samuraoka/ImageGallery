@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Xunit;
 
-namespace ImageGallery.API.Test
+namespace ImageGallery.API.Test.Entities
 {
     public class ImageTest
     {
