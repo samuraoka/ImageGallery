@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Xunit;
+using System.ComponentModel.DataAnnotations;
 
 namespace ImageGallery.Model.Test
 {
@@ -28,6 +29,20 @@ namespace ImageGallery.Model.Test
 
             // Assert
             Assert.Equal(title, obj.Title);
+        }
+
+        [Fact]
+        public void ShouldGetRequiredAttributeFromTitleProperty()
+        {
+            // Act
+            // Reflection - get attribute name and value on property
+            // https://stackoverflow.com/questions/6637679/reflection-get-attribute-name-and-value-on-property
+            var prop = typeof(ImageForCreation).GetProperty(nameof(ImageForCreation.Title));
+            var attrs = prop.GetCustomAttributes(typeof(RequiredAttribute), false);
+
+            // Assert
+            Assert.Single(attrs);
+            Assert.True(attrs[0] is RequiredAttribute);
         }
 
         [Fact]
