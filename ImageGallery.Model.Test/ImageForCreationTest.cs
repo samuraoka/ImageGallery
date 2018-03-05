@@ -46,6 +46,19 @@ namespace ImageGallery.Model.Test
         }
 
         [Fact]
+        public void ShouldGetMaxLengthAttributeFromTitleProperty()
+        {
+            // Act
+            var prop = typeof(ImageForCreation).GetProperty(nameof(ImageForCreation.Title));
+            var attrs = prop.GetCustomAttributes(typeof(MaxLengthAttribute), false);
+
+            // Assert
+            Assert.Single(attrs);
+            Assert.True(attrs[0] is MaxLengthAttribute);
+            Assert.Equal(150, (attrs[0] as MaxLengthAttribute).Length);
+        }
+
+        [Fact]
         public void ShouldSetGetBytesProperty()
         {
             // Arrange
