@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.ComponentModel.DataAnnotations;
+using Xunit;
 
 namespace ImageGallery.Model.Test
 {
@@ -27,6 +28,17 @@ namespace ImageGallery.Model.Test
 
             // Assert
             Assert.Equal(title, obj.Title);
+        }
+
+        [Fact]
+        public void ShouldGetRequiredAttributeFromTitleProperty()
+        {
+            var prop = typeof(ImageForUpdate).GetProperty(nameof(ImageForUpdate.Title));
+            var attrs = prop.GetCustomAttributes(typeof(RequiredAttribute), false);
+
+            // Assert
+            Assert.Single(attrs);
+            Assert.True(attrs[0] is RequiredAttribute);
         }
     }
 }
