@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20180305113444_Initial.cs" />
+    <Compile Remove="Migrations\20180305113444_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20180305113643_InitialMigration.cs" />
+    <Compile Remove="Migrations\20180305113643_InitialMigration.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
   </ItemGroup>
 
