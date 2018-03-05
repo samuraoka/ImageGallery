@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace ImageGallery.API
 {
@@ -25,7 +26,7 @@ namespace ImageGallery.API
             // appSettings (note: use this during development; in a production environment,
             // it's better to store the connection string in an environment variable)
             var connectionString = Configuration["connectionStrings:imageGalleryDBConnectionString"];
-            services.AddDbContext<GalleryContext>(builder => builder.UseSqlServer(connectionString));
+            services.AddGalleryContext(connectionString);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +38,22 @@ namespace ImageGallery.API
             }
 
             app.UseMvc();
+        }
+    }
+
+    public static class IServiceCollectionExtension
+    {
+        public static void AddGalleryContext(this IServiceCollection services, string connectionString)
+        {
+            if (connectionString != null)
+            {
+                services.AddDbContext<GalleryContext>(builder => builder.UseSqlServer(connectionString));
+            }
+            else
+            {
+                var databaseName = Guid.NewGuid().ToString();
+                services.AddDbContext<GalleryContext>(builder => builder.UseInMemoryDatabase(databaseName));
+            }
         }
     }
 }
