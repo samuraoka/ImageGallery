@@ -2,5 +2,6 @@
 {
     public class ImageForCreation
     {
+        public string Title { get; set; }
     }
 }

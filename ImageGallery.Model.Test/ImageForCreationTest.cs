@@ -14,5 +14,19 @@ namespace ImageGallery.Model.Test
             Assert.NotNull(obj);
             Assert.True(obj is ImageForCreation);
         }
+
+        [Fact]
+        public void ShouldSetGetTitleProperty()
+        {
+            // Arrange
+            var title = "NewImageTitle";
+            var obj = new ImageForCreation();
+
+            // Act
+            obj.Title = title;
+
+            // Assert
+            Assert.Equal(title, obj.Title);
+        }
     }
 }
