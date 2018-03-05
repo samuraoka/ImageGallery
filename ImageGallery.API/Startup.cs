@@ -1,4 +1,5 @@
 ﻿using ImageGallery.API.Entities;
+using ImageGallery.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,9 @@ namespace ImageGallery.API
             // it's better to store the connection string in an environment variable)
             var connectionString = Configuration["connectionStrings:imageGalleryDBConnectionString"];
             services.AddGalleryContext(connectionString);
+
+            // register the repository
+            services.AddScoped<IGalleryRepository, GalleryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
