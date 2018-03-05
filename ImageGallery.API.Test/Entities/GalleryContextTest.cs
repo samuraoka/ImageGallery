@@ -1,4 +1,6 @@
 ﻿using ImageGallery.API.Entities;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -30,6 +32,20 @@ namespace ImageGallery.API.Test.Entities
                 ctx.Database.EnsureDeleted();
                 ctx.Database.EnsureCreated();
             }
+        }
+
+        [Fact]
+        public void ShouldGetGalleryContest()
+        {
+            // Arrange
+            var server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+
+            // Act
+            var context = server.Host.Services.GetService(typeof(GalleryContext));
+
+            // Assert
+            Assert.NotNull(context);
+            Assert.IsType<GalleryContext>(context);
         }
 
         [Fact]
