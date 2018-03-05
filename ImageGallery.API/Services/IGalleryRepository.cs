@@ -8,5 +8,6 @@ namespace ImageGallery.API.Services
     {
         IEnumerable<Image> GetImages();
         Image GetImage(Guid id);
+        bool ImageExists(Guid id);
     }
 }

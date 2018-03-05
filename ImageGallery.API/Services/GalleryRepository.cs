@@ -15,7 +15,10 @@ namespace ImageGallery.API
             context = galleryContext;
         }
 
-        // TODO
+        public bool ImageExists(Guid id)
+        {
+            return context.Images.Any(i => i.Id == id);
+        }
 
         public Image GetImage(Guid id)
         {

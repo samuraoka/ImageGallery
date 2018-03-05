@@ -136,5 +136,35 @@ namespace ImageGallery.API.Test.Services
             Assert.Equal("fdfe7329-e05c-41fb-a7c7-4f3226d28c49.jpg", image.FileName);
             Assert.Equal("b7539694-97e7-4dfe-84da-b4256e1ff5c7", image.OwnerId);
         }
+
+        [Theory]
+        [InlineData("ae03d971-40a6-4350-b8a9-7b12e1d93d71")]
+        public void ShouldGetTrueIfImageExist(string existingId)
+        {
+            // Arrange
+            var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
+            var id = new Guid(existingId);
+
+            // Act
+            var isExist = repo.ImageExists(id);
+
+            // Assert
+            Assert.True(isExist);
+        }
+
+        [Theory]
+        [InlineData("00000000-0000-0000-0000-000000000000")]
+        public void ShouldGetFalseIfImageNotExist(string notExistingId)
+        {
+            // Arrange
+            var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
+            var id = new Guid(notExistingId);
+
+            // Act
+            var isExist = repo.ImageExists(id);
+
+            // Assert
+            Assert.False(isExist);
+        }
     }
 }
