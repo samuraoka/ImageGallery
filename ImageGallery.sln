@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageGallery.Model.Test", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageGallery.API", "ImageGallery.API\ImageGallery.API.csproj", "{BE567B4D-1B77-4FA7-AEA8-02F15D626C3F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageGallery.API.Test", "ImageGallery.API.Test\ImageGallery.API.Test.csproj", "{5BB2B215-4865-4CE2-94C0-7F667C2E0599}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,12 +31,17 @@ Global
 		{BE567B4D-1B77-4FA7-AEA8-02F15D626C3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE567B4D-1B77-4FA7-AEA8-02F15D626C3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE567B4D-1B77-4FA7-AEA8-02F15D626C3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BB2B215-4865-4CE2-94C0-7F667C2E0599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BB2B215-4865-4CE2-94C0-7F667C2E0599}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BB2B215-4865-4CE2-94C0-7F667C2E0599}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BB2B215-4865-4CE2-94C0-7F667C2E0599}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2B0697C3-31C9-4074-8088-0232930A50C8} = {DF210846-9670-4BD4-9C61-3238BCB39DCB}
+		{5BB2B215-4865-4CE2-94C0-7F667C2E0599} = {DF210846-9670-4BD4-9C61-3238BCB39DCB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {10A95CFD-85C5-4AC2-BC73-10046D071919}
