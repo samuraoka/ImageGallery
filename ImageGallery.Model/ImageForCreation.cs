@@ -8,6 +8,7 @@ namespace ImageGallery.Model.Test
         [MaxLength(150)]
         public string Title { get; set; }
 
+        [Required]
         public byte[] Bytes { get; set; }
     }
 }

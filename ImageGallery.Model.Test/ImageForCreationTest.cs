@@ -73,5 +73,16 @@ namespace ImageGallery.Model.Test
             // Assert
             Assert.Equal(bytes, obj.Bytes);
         }
+
+        [Fact]
+        public void ShouldGetRequiredAttributeFromBytesProperty()
+        {
+            var prop = typeof(ImageForCreation).GetProperty(nameof(ImageForCreation.Bytes));
+            var attrs = prop.GetCustomAttributes(typeof(RequiredAttribute), false);
+
+            // Assert
+            Assert.Single(attrs);
+            Assert.True(attrs[0] is RequiredAttribute);
+        }
     }
 }
