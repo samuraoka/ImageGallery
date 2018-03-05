@@ -43,5 +43,20 @@ namespace ImageGallery.Model.Test
             // Assert
             Assert.Equal(title, obj.Title);
         }
+
+        [Fact]
+        public void ShouldSetGetFileNameProperty()
+        {
+            // Arrange
+            var fileName = "NewImageFileName.jpg";
+            var obj = new Image();
+
+            // Act
+            obj.FileName = fileName;
+
+            // Assert
+            Assert.Equal(fileName, obj.FileName);
+            
+        }
     }
 }
