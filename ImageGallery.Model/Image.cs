@@ -1,9 +1,9 @@
-﻿namespace ImageGallery.Model
+﻿using System;
+
+namespace ImageGallery.Model
 {
     public class Image
     {
-        public Image()
-        {
-        }
+        public Guid Id { get; set; }
     }
 }
