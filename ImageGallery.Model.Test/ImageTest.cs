@@ -29,5 +29,19 @@ namespace ImageGallery.Model.Test
             // Assert
             Assert.Equal(id, obj.Id);
         }
+
+        [Fact]
+        public void ShouldSetGetTitleProperty()
+        {
+            // Arrange
+            var title = "New Image Title";
+            var obj = new Image();
+
+            // Act
+            obj.Title = title;
+
+            // Assert
+            Assert.Equal(title, obj.Title);
+        }
     }
 }
