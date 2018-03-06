@@ -40,6 +40,20 @@ namespace ImageGallery.API
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                // TODO add a exception handler for production environment.
+            }
+
+            // Serve files inside of web root
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?tabs=aspnetcore2x#serve-files-inside-of-web-root
+            app.UseStaticFiles();
+
+            // TODO add AutoMapper setting here
+
+            // TODO ensure DB migrations are applied
+
+            // TODO seed the DB with data
 
             app.UseMvc();
         }
