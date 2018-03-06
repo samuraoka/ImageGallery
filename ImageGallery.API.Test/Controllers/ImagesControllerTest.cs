@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace ImageGallery.API.Test.Controllers
 {
@@ -14,10 +14,12 @@ namespace ImageGallery.API.Test.Controllers
     public class ImagesControllerTest : IClassFixture<WebServerFixture>
     {
         private readonly TestServer server;
+        private readonly ITestOutputHelper output;
 
-        public ImagesControllerTest(WebServerFixture fixture)
+        public ImagesControllerTest(WebServerFixture fixture, ITestOutputHelper output)
         {
             server = fixture.Server;
+            this.output = output;
         }
 
         [Theory]
@@ -39,24 +41,39 @@ namespace ImageGallery.API.Test.Controllers
         }
 
         [Theory]
-        [InlineData("api/images/GetImage", "d70f656d-75a7-45fc-b385-e4daa834e6a8")]
+        [InlineData("api/images", "d70f656d-75a7-45fc-b385-e4daa834e6a8")]
         public async Task ShouldAccessGetImageMethod(string requestUri, string id)
         {
             // Act
             HttpResponseMessage response = null;
             using (var client = server.CreateClient())
             {
-                // Build query string for System.Net.HttpClient get
-                // https://stackoverflow.com/questions/17096201/build-query-string-for-system-net-httpclient-get
-                var query = HttpUtility.ParseQueryString(string.Empty);
-                query["id"] = id;
-                response = await client.GetAsync(requestUri + "?" + query.ToString());
+                response = await client.GetAsync(requestUri + "/" + id);
                 response.EnsureSuccessStatusCode();
             }
 
             // Assert
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("api/images", "d70f656d-75a7-45fc-b385-e4daa834e6a8")]
+        public async Task ShouldGetImage(string requestUri, string id)
+        {
+            // Act
+            string responseString = null;
+            using (var client = server.CreateClient())
+            {
+                var response = await client.GetAsync(requestUri + "/" + id);
+                response.EnsureSuccessStatusCode();
+                responseString = await response.Content.ReadAsStringAsync();
+            }
+            var image = JsonConvert.DeserializeObject<Model.Image>(responseString) as Model.Image;
+
+            // Assert
+            Assert.IsType<Model.Image>(image);
+            Assert.Equal(id, image.Id.ToString());
         }
     }
 }

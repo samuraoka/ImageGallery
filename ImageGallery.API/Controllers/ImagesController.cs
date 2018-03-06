@@ -34,7 +34,16 @@ namespace ImageGallery.API.Controllers
         [HttpGet("{id}", Name = "GetImage")]
         public IActionResult GetImage(Guid id)
         {
-            return Ok();
+            var imageFromRepo = galleryRepository.GetImage(id);
+
+            if (imageFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            var imageToReturn = Mapper.Map<Model.Image>(imageFromRepo);
+
+            return Ok(imageToReturn);
         }
     }
 }
