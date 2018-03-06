@@ -10,5 +10,8 @@ namespace ImageGallery.API.Services
         Image GetImage(Guid id);
         bool ImageExists(Guid id);
         void AddImage(Image image);
+        void UpdateImage(Image image);
+        void DeleteImage(Image image);
+        bool Save();
     }
 }

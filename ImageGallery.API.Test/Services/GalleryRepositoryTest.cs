@@ -168,7 +168,7 @@ namespace ImageGallery.API.Test.Services
         }
 
         [Fact]
-        public void CouldAddImage()
+        public void CouldAddAndSaveImageAnd()
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
@@ -181,8 +181,72 @@ namespace ImageGallery.API.Test.Services
             };
 
             // Act
-            // It's OK, if no exception is raised.
             repo.AddImage(image);
+            var saveResult = repo.Save();
+            var addedImage = repo.GetImage(image.Id);
+
+            // Arrange
+            Assert.True(saveResult);
+            Assert.Equal(image.Id, addedImage.Id);
+            Assert.Equal(image.Title, addedImage.Title);
+            Assert.Equal(image.FileName, addedImage.FileName);
+            Assert.Equal(image.OwnerId, addedImage.OwnerId);
+        }
+
+        [Theory]
+        [InlineData("ae03d971-40a6-4350-b8a9-7b12e1d93d71")]
+        public void CouldNotUpdateIdAndSaveImage(string targetId)
+        {
+            // Arrange
+            var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
+            var image = repo.GetImage(new Guid("ae03d971-40a6-4350-b8a9-7b12e1d93d71"));
+
+            // Act
+            image.Id = Guid.NewGuid();
+            Assert.Throws<InvalidOperationException>(() => repo.Save());
+        }
+
+        [Theory]
+        [InlineData("ae03d971-40a6-4350-b8a9-7b12e1d93d71")]
+        public void CouldUpdateAndSaveImage(string targetId)
+        {
+            // Arrange
+            var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
+            var id = new Guid(targetId);
+            var image = repo.GetImage(id);
+
+            // Act
+            image.Title = "New Title";
+            image.FileName = "NewImage.jpg";
+            image.OwnerId = "NewOwnerId";
+            repo.UpdateImage(image);
+            var saveResult = repo.Save();
+            var updatedImage = repo.GetImage(id);
+
+            // Assert
+            Assert.True(saveResult);
+            Assert.Equal(image.Id, updatedImage.Id);
+            Assert.Equal("New Title", updatedImage.Title);
+            Assert.Equal("NewImage.jpg", updatedImage.FileName);
+            Assert.Equal("NewOwnerId", updatedImage.OwnerId);
+        }
+
+        [Theory]
+        [InlineData("25320c5e-f58a-4b1f-b63a-8ee07a840bdf")]
+        public void CouldRemoveAndSaveImage(string targetId)
+        {
+            // Arrange
+            var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
+            var id = new Guid(targetId);
+            var image = repo.GetImage(id);
+
+            // Act
+            repo.DeleteImage(image);
+            var saveResult = repo.Save();
+
+            // Assert
+            Assert.True(saveResult);
+            Assert.False(repo.ImageExists(id));
         }
     }
 }
