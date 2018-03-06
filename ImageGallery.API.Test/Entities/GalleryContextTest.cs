@@ -1,5 +1,5 @@
 ﻿using ImageGallery.API.Entities;
-using Microsoft.AspNetCore.Hosting;
+using ImageGallery.API.Test.Fixture;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,12 +15,16 @@ namespace ImageGallery.API.Test.Entities
     // Microsoft.EntityFrameworkCore.InMemory 
     // https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.InMemory/2.1.0-preview1-final
     // Install-Package -Id Microsoft.EntityFrameworkCore.InMemory -Project ImageGallery.API.Test
+    [Collection("WebServer collection")]
     public class GalleryContextTest
     {
+        private readonly TestServer server;
         private readonly DbContextOptions<GalleryContext> options;
 
-        public GalleryContextTest()
+        public GalleryContextTest(WebServerFixture fixture)
         {
+            server = fixture.Server;
+
             // Testing with InMemory
             // https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/in-memory
             options = new DbContextOptionsBuilder<GalleryContext>()
@@ -37,9 +41,6 @@ namespace ImageGallery.API.Test.Entities
         [Fact]
         public void ShouldGetGalleryContest()
         {
-            // Arrange
-            var server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
-
             // Act
             var context = server.Host.Services.GetService(typeof(GalleryContext));
 

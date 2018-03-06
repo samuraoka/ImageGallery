@@ -34,8 +34,10 @@ namespace ImageGallery.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, GalleryContext galleryContext)
         {
+            //TODO add console logging to the LoggerFactory
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -49,11 +51,12 @@ namespace ImageGallery.API
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?tabs=aspnetcore2x#serve-files-inside-of-web-root
             app.UseStaticFiles();
 
-            // TODO add AutoMapper setting here
+            // DB migrations are applied
+            // TODO galleryContext.Database.Migrate();
+            galleryContext.Database.EnsureCreated();
 
-            // TODO ensure DB migrations are applied
-
-            // TODO seed the DB with data
+            // seed the DB with data
+            galleryContext.EnsureSeedDataForContext();
 
             app.UseMvc();
         }

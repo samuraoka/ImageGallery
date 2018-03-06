@@ -1,33 +1,30 @@
-using Microsoft.AspNetCore.Hosting;
+using ImageGallery.API.Test.Fixture;
 using Microsoft.AspNetCore.TestHost;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace ImageGallery.API.Test.Controllers
 {
-    public class UnitTest1
+    public class UnitTest1 : IClassFixture<WebServerFixture>
     {
         private readonly TestServer server;
-        private readonly HttpClient client;
 
-        public UnitTest1()
+        public UnitTest1(WebServerFixture fixture)
         {
-            // Microsoft.AspNetCore.TestHost
-            // https://www.nuget.org/packages/Microsoft.AspNetCore.TestHost/2.1.0-preview1-final
-            // Install-Package -Id Microsoft.AspNetCore.TestHost -ProjectName ImageGallery.API.Test
-            server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
-            client = server.CreateClient();
+            server = fixture.Server;
         }
 
         [Fact]
         public async Task Test1()
         {
             // Act
-            var response = await client.GetAsync("api/values");
-            response.EnsureSuccessStatusCode();
-
-            var responseString = await response.Content.ReadAsStringAsync();
+            string responseString = null;
+            using (var client = server.CreateClient())
+            {
+                var response = await client.GetAsync("api/values");
+                response.EnsureSuccessStatusCode();
+                responseString = await response.Content.ReadAsStringAsync();
+            }
 
             // Assert
             Assert.Equal("[\"value1\",\"value2\"]", responseString);

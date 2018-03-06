@@ -7,17 +7,34 @@ using Xunit;
 
 namespace ImageGallery.API.Test.Services
 {
-    public class GalleryRepositoryTest
+    public class GalleryRepositoryTest : IDisposable
     {
-        private readonly TestServer server;
+        private TestServer server;
 
         public GalleryRepositoryTest()
         {
+            // Microsoft.AspNetCore.TestHost
+            // https://www.nuget.org/packages/Microsoft.AspNetCore.TestHost/2.1.0-preview1-final
+            // Install-Package -Id Microsoft.AspNetCore.TestHost -ProjectName ImageGallery.API.Test
             server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+        }
 
-            // Populare test data to the In-Memory database
-            var context = server.Host.Services.GetService(typeof(GalleryContext)) as GalleryContext;
-            context.EnsureSeedDataForContext();
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (server != null)
+                {
+                    server.Dispose();
+                    server = null;
+                }
+            }
         }
 
         [Fact]
@@ -199,7 +216,7 @@ namespace ImageGallery.API.Test.Services
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
-            var image = repo.GetImage(new Guid("ae03d971-40a6-4350-b8a9-7b12e1d93d71"));
+            var image = repo.GetImage(new Guid(targetId));
 
             // Act
             image.Id = Guid.NewGuid();
