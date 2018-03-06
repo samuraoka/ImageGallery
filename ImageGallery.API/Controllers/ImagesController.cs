@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ImageGallery.API.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 
 namespace ImageGallery.API.Controllers
@@ -28,6 +29,12 @@ namespace ImageGallery.API.Controllers
             var imagesToReturn = Mapper.Map<IEnumerable<Model.Image>>(imagesFromRepo);
 
             return Ok(imagesToReturn);
+        }
+
+        [HttpGet("{id}", Name = "GetImage")]
+        public IActionResult GetImage(Guid id)
+        {
+            return Ok();
         }
     }
 }
