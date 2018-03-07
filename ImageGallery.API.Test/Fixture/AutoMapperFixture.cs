@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageGallery.API.Helpers;
+using System;
 using Xunit;
 
 namespace ImageGallery.API.Test.Fixture
@@ -7,7 +8,7 @@ namespace ImageGallery.API.Test.Fixture
     {
         public AutoMapperFixture()
         {
-            Program.InitializeAutoMapper();
+            AutoMapperHelper.InitializeAutoMapper();
         }
 
         public void Dispose()
