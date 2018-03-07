@@ -75,5 +75,23 @@ namespace ImageGallery.API.Test.Controllers
             Assert.IsType<Model.Image>(image);
             Assert.Equal(id, image.Id.ToString());
         }
+
+        [Theory]
+        [InlineData("api/images")]
+        public async Task ShouldAccessPostImageMethod(string requestUri)
+        {
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                HttpContent content = null;
+                response = await client.PostAsync(requestUri, content);
+                response.EnsureSuccessStatusCode();
+            }
+
+            // Assert
+            Assert.NotNull(response);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
     }
 }

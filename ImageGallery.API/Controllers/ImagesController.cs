@@ -17,6 +17,7 @@ namespace ImageGallery.API.Controllers
             this.galleryRepository = galleryRepository;
         }
 
+        [HttpGet]
         public IActionResult GetImages()
         {
             // get from repo
@@ -44,6 +45,12 @@ namespace ImageGallery.API.Controllers
             var imageToReturn = Mapper.Map<Model.Image>(imageFromRepo);
 
             return Ok(imageToReturn);
+        }
+
+        [HttpPost]
+        public IActionResult PostImage()
+        {
+            return Ok();
         }
     }
 }
