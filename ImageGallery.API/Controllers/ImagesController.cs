@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ImageGallery.API.Helpers;
 using ImageGallery.API.Services;
 using ImageGallery.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -55,6 +56,16 @@ namespace ImageGallery.API.Controllers
             {
                 return BadRequest();
             }
+
+            // Introduction to model validation in ASP.NET Core MVC
+            // https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation
+            if (ModelState.IsValid == false)
+            {
+                // return 422 - Unprocessable Entity when validation fails
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
+
+            // TODO implement create image process.
 
             return Ok();
         }

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -74,11 +75,12 @@ namespace ImageGallery.API.Test.Controllers
         }
 
         [Theory]
-        [InlineData("api/images", null)]
+        [InlineData("api/images", "../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
         public async Task ShouldAccessCreateImageMethod(string requestUri, string imageFilePath)
         {
             // Arrange
-            var content = await CreateUploadImageContent(imageFilePath);
+            var title = "New Image " + Guid.NewGuid().ToString();
+            var content = await CreateUploadImageContent(title, imageFilePath);
 
             // Act
             HttpResponseMessage response = null;
@@ -134,6 +136,58 @@ namespace ImageGallery.API.Test.Controllers
         }
 
         [Theory]
+        [InlineData("api/images", 151, "../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
+        public async void ShouldGetUnprocessableEntityResponseIfImageTitleLengthOvers(string requestUri, int titleLength, string imageFilePath)
+        {
+            // Arrange
+            // Best way to repeat a character in C#
+            // https://stackoverflow.com/questions/411752/best-way-to-repeat-a-character-in-c-sharp
+            var title = string.Concat(Enumerable.Repeat("a", titleLength));
+            var content = await CreateUploadImageContent(title, imageFilePath);
+
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.PostAsync(requestUri, content);
+            }
+
+            // Assert
+            Assert.Throws<HttpRequestException>(() => response.EnsureSuccessStatusCode());
+            // HTTP response status codes
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+            // Getting Http Status code number (200, 301, 404, etc.) from HttpWebRequest and HttpWebResponse
+            // https://stackoverflow.com/questions/1330856/getting-http-status-code-number-200-301-404-etc-from-httpwebrequest-and-ht
+            Assert.Equal(422, (int)response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("api/images", 150, null)]
+        public async void ShouldGetUnprocessableEntityResponseIfImageBytesIsNull(string requestUri, int titleLength, string imageFilePath)
+        {
+            // Arrange
+            // Best way to repeat a character in C#
+            // https://stackoverflow.com/questions/411752/best-way-to-repeat-a-character-in-c-sharp
+            var title = string.Concat(Enumerable.Repeat("a", titleLength));
+            var content = await CreateUploadImageContent(title, imageFilePath);
+
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.PostAsync(requestUri, content);
+            }
+
+            // Assert
+            Assert.Throws<HttpRequestException>(() => response.EnsureSuccessStatusCode());
+            // HTTP response status codes
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+            // Getting Http Status code number (200, 301, 404, etc.) from HttpWebRequest and HttpWebResponse
+            // https://stackoverflow.com/questions/1330856/getting-http-status-code-number-200-301-404-etc-from-httpwebrequest-and-ht
+            Assert.Equal(422, (int)response.StatusCode);
+        }
+
+        [Theory]
         [InlineData("api/images", "../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
         public async Task CouldUploadImageData(string requestUri, string imageFilePath)
         {
@@ -142,7 +196,8 @@ namespace ImageGallery.API.Test.Controllers
             int expectedNumberOfImages = await GetTheNumberOfImages(requestUri);
             expectedNumberOfImages += 1;
             // Creating an upload data
-            var content = await CreateUploadImageContent(imageFilePath);
+            var title = "New Image " + Guid.NewGuid().ToString();
+            var content = await CreateUploadImageContent(title, imageFilePath);
 
             // Act
             // Uploading...
@@ -173,12 +228,12 @@ namespace ImageGallery.API.Test.Controllers
             return numberOfImages;
         }
 
-        private async Task<StringContent> CreateUploadImageContent(string imageFilePath)
+        private async Task<StringContent> CreateUploadImageContent(string title, string imageFilePath)
         {
             output.WriteLine($"Current Directory: {Directory.GetCurrentDirectory()}");
             var uploadData = new ImageForCreation
             {
-                Title = "New Image " + Guid.NewGuid().ToString(),
+                Title = title,
                 Bytes = null,
             };
             if (imageFilePath != null)
