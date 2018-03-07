@@ -78,7 +78,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images")]
-        public async Task ShouldAccessPostImageMethod(string requestUri)
+        public async Task ShouldAccessCreateImageMethod(string requestUri)
         {
             // Act
             HttpResponseMessage response = null;

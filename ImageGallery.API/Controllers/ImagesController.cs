@@ -48,7 +48,7 @@ namespace ImageGallery.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostImage()
+        public IActionResult CreateImage()
         {
             return Ok();
         }
