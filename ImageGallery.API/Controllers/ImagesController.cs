@@ -125,5 +125,11 @@ namespace ImageGallery.API.Controllers
 
             return NoContent();
         }
+
+        [HttpPut]
+        public IActionResult UpdateImage()
+        {
+            return NoContent();
+        }
     }
 }

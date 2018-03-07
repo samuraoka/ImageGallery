@@ -327,6 +327,22 @@ namespace ImageGallery.API.Test.Controllers
             Assert.Equal(expecteNumberOfImages, await GetTheNumberOfImages(requestUri));
         }
 
+        [Theory]
+        [InlineData("api/images")]
+        public async void ShouldBeAbleToAccessUpdateImageMethod(string requestUri)
+        {
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.PutAsync(requestUri, null);
+                response.EnsureSuccessStatusCode();
+            }
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
         private async Task<Image> UploadImage(string requestUri, string imageFilePath)
         {
             HttpResponseMessage response = null;
