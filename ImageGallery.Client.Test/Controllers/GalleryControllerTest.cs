@@ -2,7 +2,7 @@
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ImageGallery.Client.Test
+namespace ImageGallery.Client.Controllers.Test
 {
     public class GalleryControllerTest
     {
