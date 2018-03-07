@@ -51,6 +51,11 @@ namespace ImageGallery.API.Controllers
         [HttpPost]
         public IActionResult CreateImage([FromBody] ImageForCreation imageForCreation)
         {
+            if (imageForCreation == null)
+            {
+                return BadRequest();
+            }
+
             return Ok();
         }
     }

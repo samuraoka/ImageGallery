@@ -78,7 +78,7 @@ namespace ImageGallery.API.Test.Controllers
         public async Task ShouldAccessCreateImageMethod(string requestUri, string imageFilePath)
         {
             // Arrange
-            var content = await CreateUploadContent(imageFilePath);
+            var content = await CreateUploadImageContent(imageFilePath);
 
             // Act
             HttpResponseMessage response = null;
@@ -91,6 +91,27 @@ namespace ImageGallery.API.Test.Controllers
             // Assert
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("api/images")]
+        public async Task ShouldGetBadRequestResponseIfContentIsEmpty(string requestUri)
+        {
+            // Arrange
+            // Parameter Binding in ASP.NET Web API
+            // https://docs.microsoft.com/en-us/aspnet/web-api/overview/formats-and-model-binding/parameter-binding-in-aspnet-web-api
+            var emptyContent = new StringContent("", Encoding.Unicode, JsonContentType);
+
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.PostAsync(requestUri, emptyContent);
+            }
+
+            // Assert
+            Assert.Throws<HttpRequestException>(() => response.EnsureSuccessStatusCode());
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Theory]
@@ -121,7 +142,7 @@ namespace ImageGallery.API.Test.Controllers
             int expectedNumberOfImages = await GetTheNumberOfImages(requestUri);
             expectedNumberOfImages += 1;
             // Creating an upload data
-            var content = await CreateUploadContent(imageFilePath);
+            var content = await CreateUploadImageContent(imageFilePath);
 
             // Act
             // Uploading...
@@ -152,7 +173,7 @@ namespace ImageGallery.API.Test.Controllers
             return numberOfImages;
         }
 
-        private async Task<StringContent> CreateUploadContent(string imageFilePath)
+        private async Task<StringContent> CreateUploadImageContent(string imageFilePath)
         {
             output.WriteLine($"Current Directory: {Directory.GetCurrentDirectory()}");
             var uploadData = new ImageForCreation
@@ -165,7 +186,9 @@ namespace ImageGallery.API.Test.Controllers
                 uploadData.Bytes = await File.ReadAllBytesAsync(imageFilePath);
             }
             var serializedImageForCreation = JsonConvert.SerializeObject(uploadData);
-            return new StringContent(serializedImageForCreation, Encoding.Unicode, "application/json");
+            return new StringContent(serializedImageForCreation, Encoding.Unicode, JsonContentType);
         }
+
+        public const string JsonContentType = "application/json";
     }
 }
