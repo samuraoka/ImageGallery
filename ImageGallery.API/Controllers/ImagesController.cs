@@ -116,6 +116,13 @@ namespace ImageGallery.API.Controllers
                 return NotFound();
             }
 
+            galleryRepository.DeleteImage(imageFromRepo);
+
+            if (galleryRepository.Save() == false)
+            {
+                throw new Exception($"Deleting image with {id} failed on save.");
+            }
+
             return NoContent();
         }
     }

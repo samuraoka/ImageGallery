@@ -305,6 +305,42 @@ namespace ImageGallery.API.Test.Controllers
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
+        [Theory]
+        [InlineData("api/images", "../../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
+        public async void ShouldBeAbleToDeleteImage(string requestUri, string imageFilePath)
+        {
+            // Arrange
+            var uploadedImage = await UploadImage(requestUri, imageFilePath);
+            var expecteNumberOfImages = await GetTheNumberOfImages(requestUri);
+            expecteNumberOfImages -= 1;
+
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.DeleteAsync(string.Join('/', requestUri, uploadedImage.Id));
+                response.EnsureSuccessStatusCode();
+            }
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            Assert.Equal(expecteNumberOfImages, await GetTheNumberOfImages(requestUri));
+        }
+
+        private async Task<Image> UploadImage(string requestUri, string imageFilePath)
+        {
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                var title = "New Image " + Guid.NewGuid().ToString();
+                var requestBody = await CreateUploadImageContent(title, imageFilePath);
+                response = await client.PostAsync(requestUri, requestBody);
+                response.EnsureSuccessStatusCode();
+            }
+            var responseBody = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<Image>(responseBody);
+        }
+
         private async Task<int> GetTheNumberOfImages(string requestUri)
         {
             int numberOfImages = -1;
