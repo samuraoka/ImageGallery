@@ -126,8 +126,8 @@ namespace ImageGallery.API.Controllers
             return NoContent();
         }
 
-        [HttpPut]
-        public IActionResult UpdateImage()
+        [HttpPut("{id}")]
+        public IActionResult UpdateImage(Guid id, [FromBody] ImageForUpdate iamgeForUpdate)
         {
             return NoContent();
         }

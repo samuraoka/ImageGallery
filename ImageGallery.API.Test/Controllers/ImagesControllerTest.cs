@@ -328,19 +328,19 @@ namespace ImageGallery.API.Test.Controllers
         }
 
         [Theory]
-        [InlineData("api/images")]
-        public async void ShouldBeAbleToAccessUpdateImageMethod(string requestUri)
+        [InlineData("api/images", "d70f656d-75a7-45fc-b385-e4daa834e6a8")]
+        public async void ShouldGetUnsupportedMediaTypeResponseIfRequestBodyIsNull(string requestUri, string targetId)
         {
             // Act
             HttpResponseMessage response = null;
             using (var client = server.CreateClient())
             {
-                response = await client.PutAsync(requestUri, null);
-                response.EnsureSuccessStatusCode();
+                response = await client.PutAsync(string.Join("/", requestUri, targetId), null);
             }
 
             // Assert
-            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            Assert.Throws<HttpRequestException>(() => response.EnsureSuccessStatusCode());
+            Assert.Equal(HttpStatusCode.UnsupportedMediaType, response.StatusCode);
         }
 
         private async Task<Image> UploadImage(string requestUri, string imageFilePath)
