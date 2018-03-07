@@ -134,6 +134,14 @@ namespace ImageGallery.API.Controllers
                 return BadRequest();
             }
 
+            if (ModelState.IsValid == false)
+            {
+                // return 422 - Unprocessable Entity when validation fails
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
+
+            // TODO implemente update procedure
+
             return NoContent();
         }
     }

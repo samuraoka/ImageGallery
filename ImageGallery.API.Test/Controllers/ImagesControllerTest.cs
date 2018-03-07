@@ -345,20 +345,52 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images", "d70f656d-75a7-45fc-b385-e4daa834e6a8")]
-        public async void ShouldGetBadRequestResponseIfRequestBodyIsEmpty(string requestUri, string targetId)
+        public async void ShouldGetBadRequestResponseIfRequestBodyIsEmpty(string baseUri, string targetId)
         {
+            // Arrange
+            var requestUri = string.Join('/', baseUri, targetId);
+            var requestBody = new StringContent("", Encoding.Unicode, JsonContentType);
+
             // Act
             HttpResponseMessage response = null;
             using (var client = server.CreateClient())
             {
-                var requestUrl = string.Join('/', requestUri, targetId);
-                var requestBody = new StringContent("", Encoding.Unicode, JsonContentType);
-                response = await client.PutAsync(requestUrl, requestBody);
+                response = await client.PutAsync(requestUri, requestBody);
             }
 
             // Assert
             Assert.Throws<HttpRequestException>(() => response.EnsureSuccessStatusCode());
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("api/images", "ab46efdb-0384-400c-89cb-95bba1c500e9")]
+        public async void ShouldGetUnprocessableEntityObjectResultIfTitleIsNull(string baseUri, string targetId)
+        {
+            // Arrange
+            var requestUri = string.Join('/', baseUri, targetId);
+            var requestBody = CreateUpdateImageRequestBody();
+
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.PutAsync(requestUri, requestBody);
+            }
+
+            // Assert
+            Assert.Throws<HttpRequestException>(() => response.EnsureSuccessStatusCode());
+            Assert.Equal(422, (int)response.StatusCode);
+        }
+
+        private StringContent CreateUpdateImageRequestBody()
+        {
+            var data = new ImageForUpdate
+            {
+                Title = null
+            };
+            var serializedData = JsonConvert.SerializeObject(data);
+            return new StringContent(serializedData, Encoding.Unicode, JsonContentType);
         }
 
         private async Task<Image> UploadImage(string requestUri, string imageFilePath)
