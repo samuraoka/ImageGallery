@@ -129,6 +129,11 @@ namespace ImageGallery.API.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateImage(Guid id, [FromBody] ImageForUpdate iamgeForUpdate)
         {
+            if (iamgeForUpdate == null)
+            {
+                return BadRequest();
+            }
+
             return NoContent();
         }
     }

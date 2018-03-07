@@ -343,6 +343,24 @@ namespace ImageGallery.API.Test.Controllers
             Assert.Equal(HttpStatusCode.UnsupportedMediaType, response.StatusCode);
         }
 
+        [Theory]
+        [InlineData("api/images", "d70f656d-75a7-45fc-b385-e4daa834e6a8")]
+        public async void ShouldGetBadRequestResponseIfRequestBodyIsEmpty(string requestUri, string targetId)
+        {
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                var requestUrl = string.Join('/', requestUri, targetId);
+                var requestBody = new StringContent("", Encoding.Unicode, JsonContentType);
+                response = await client.PutAsync(requestUrl, requestBody);
+            }
+
+            // Assert
+            Assert.Throws<HttpRequestException>(() => response.EnsureSuccessStatusCode());
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
         private async Task<Image> UploadImage(string requestUri, string imageFilePath)
         {
             HttpResponseMessage response = null;
