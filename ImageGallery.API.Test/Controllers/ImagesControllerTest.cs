@@ -29,6 +29,13 @@ namespace ImageGallery.API.Test.Controllers
             // https://www.nuget.org/packages/Microsoft.AspNetCore.TestHost/2.1.0-preview1-final
             // Install-Package -Id Microsoft.AspNetCore.TestHost -ProjectName ImageGallery.API.Test
             server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+
+            // Set web root path for test environment
+            var hostingEnvironment = server.Host.Services.GetService(typeof(IHostingEnvironment)) as IHostingEnvironment;
+            hostingEnvironment.WebRootPath = Environment.CurrentDirectory;
+
+            // Create Directory
+            Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "images"));
         }
 
         public void Dispose()
@@ -46,6 +53,9 @@ namespace ImageGallery.API.Test.Controllers
                     server.Dispose();
                     server = null;
                 }
+
+                // Delete Directory
+                Directory.Delete(Path.Combine(Environment.CurrentDirectory, "images"), recursive: true);
             }
         }
 
@@ -114,7 +124,7 @@ namespace ImageGallery.API.Test.Controllers
 
             // Assert
             Assert.NotNull(response);
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
 
         [Theory]
@@ -234,6 +244,33 @@ namespace ImageGallery.API.Test.Controllers
 
             // Assert
             Assert.Equal(expectedNumberOfImages, actualNumberofImages);
+        }
+
+        [Theory]
+        [InlineData("api/images", "../../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
+        public async void ShouldGetSavedImageFromFileSystem(string requestUri, string imageFilePath)
+        {
+            // Arrange
+            // Creating an upload data
+            var title = "New Image " + Guid.NewGuid().ToString();
+            var content = await CreateUploadImageContent(title, imageFilePath);
+            var expectedImage = await File.ReadAllBytesAsync(imageFilePath);
+
+            // Act
+            // Uploading...
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.PostAsync(requestUri, content);
+                response.EnsureSuccessStatusCode();
+            }
+            var resBody = await response.Content.ReadAsStringAsync();
+            var createdImage = JsonConvert.DeserializeObject<Model.Image>(resBody);
+            var samvedImage = await File.ReadAllBytesAsync($"{Environment.CurrentDirectory}/images/{createdImage.FileName}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            Assert.Equal(expectedImage, samvedImage);
         }
 
         private async Task<int> GetTheNumberOfImages(string requestUri)

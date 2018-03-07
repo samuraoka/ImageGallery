@@ -2,9 +2,11 @@
 using ImageGallery.API.Helpers;
 using ImageGallery.API.Services;
 using ImageGallery.Model;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace ImageGallery.API.Controllers
 {
@@ -13,10 +15,12 @@ namespace ImageGallery.API.Controllers
     public class ImagesController : Controller
     {
         private readonly IGalleryRepository galleryRepository;
+        private readonly IHostingEnvironment hostingEnvironment;
 
-        public ImagesController(IGalleryRepository galleryRepository)
+        public ImagesController(IGalleryRepository galleryRepository, IHostingEnvironment hostingEnvironment)
         {
             this.galleryRepository = galleryRepository;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         [HttpGet]
@@ -71,7 +75,21 @@ namespace ImageGallery.API.Controllers
             // Create an iamge from the passed-in bytes (Base64), and
             // set the filename on the image
 
-            // TODO implement how to save image to the file system.
+            // get this environment's web root path (the path
+            // from which static content, like an image, is served)
+            var webRootPath = hostingEnvironment.WebRootPath;
+
+            // create the filename
+            var filename = Guid.NewGuid().ToString() + ".jpg";
+
+            // the full file path
+            var filePath = Path.Combine($"{webRootPath}/images/{filename}");
+
+            // write bytes and auto-close stream
+            System.IO.File.WriteAllBytes(filePath, imageForCreation.Bytes);
+
+            // fill out the filename
+            imageEntity.FileName = filename;
 
             // add and save
             galleryRepository.AddImage(imageEntity);
@@ -81,9 +99,11 @@ namespace ImageGallery.API.Controllers
                 throw new Exception("Adding an image failed on save.");
             }
 
-            // TODO implement create image process.
+            var imageToReturn = Mapper.Map<Image>(imageEntity);
 
-            return Ok();
+            // 201 Created
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201
+            return CreatedAtRoute("GetImage", new { id = imageToReturn.Id }, imageToReturn);
         }
     }
 }
