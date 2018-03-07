@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ImageGallery.Model.Test
+namespace ImageGallery.Model
 {
     public class ImageForUpdate
     {
