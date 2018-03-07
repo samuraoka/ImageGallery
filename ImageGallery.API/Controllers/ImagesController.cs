@@ -65,6 +65,22 @@ namespace ImageGallery.API.Controllers
                 return new UnprocessableEntityObjectResult(ModelState);
             }
 
+            // Automapper maps only the Title in our configuration
+            var imageEntity = Mapper.Map<Entities.Image>(imageForCreation);
+
+            // Create an iamge from the passed-in bytes (Base64), and
+            // set the filename on the image
+
+            // TODO implement how to save image to the file system.
+
+            // add and save
+            galleryRepository.AddImage(imageEntity);
+
+            if (galleryRepository.Save() == false)
+            {
+                throw new Exception("Adding an image failed on save.");
+            }
+
             // TODO implement create image process.
 
             return Ok();

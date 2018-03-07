@@ -1,5 +1,5 @@
-﻿using ImageGallery.API.Test.Fixture;
-using ImageGallery.Model;
+﻿using ImageGallery.Model;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
 using System;
@@ -16,15 +16,37 @@ using Xunit.Abstractions;
 namespace ImageGallery.API.Test.Controllers
 {
     [Collection("Automapper collection")]
-    public class ImagesControllerTest : IClassFixture<WebServerFixture>
+    public class ImagesControllerTest : IDisposable
     {
-        private readonly TestServer server;
+        private TestServer server;
         private readonly ITestOutputHelper output;
 
-        public ImagesControllerTest(WebServerFixture fixture, ITestOutputHelper output)
+        public ImagesControllerTest(ITestOutputHelper output)
         {
-            server = fixture.Server;
             this.output = output;
+
+            // Microsoft.AspNetCore.TestHost
+            // https://www.nuget.org/packages/Microsoft.AspNetCore.TestHost/2.1.0-preview1-final
+            // Install-Package -Id Microsoft.AspNetCore.TestHost -ProjectName ImageGallery.API.Test
+            server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (server != null)
+                {
+                    server.Dispose();
+                    server = null;
+                }
+            }
         }
 
         [Theory]
