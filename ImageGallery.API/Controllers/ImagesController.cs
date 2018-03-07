@@ -106,9 +106,16 @@ namespace ImageGallery.API.Controllers
             return CreatedAtRoute("GetImage", new { id = imageToReturn.Id }, imageToReturn);
         }
 
-        [HttpDelete]
-        public IActionResult DeleteImage()
+        [HttpDelete("{id}")]
+        public IActionResult DeleteImage(Guid id)
         {
+            var imageFromRepo = galleryRepository.GetImage(id);
+
+            if (imageFromRepo == null)
+            {
+                return NotFound();
+            }
+
             return NoContent();
         }
     }

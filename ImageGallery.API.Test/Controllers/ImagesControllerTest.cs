@@ -282,11 +282,27 @@ namespace ImageGallery.API.Test.Controllers
             using (var client = server.CreateClient())
             {
                 response = await client.DeleteAsync(requestUri);
-                response.EnsureSuccessStatusCode();
             }
 
             // Assert
-            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            Assert.Throws<HttpRequestException>(() => response.EnsureSuccessStatusCode());
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("api/images", "../../../../TestData/6b32c074-65af-4f2b-9f3a-1b2d4deb7050.jpg")]
+        public async void ShouldGetNotFoundResponseIfPassesNotExistId(string requestUri, string targetId)
+        {
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.DeleteAsync(String.Join('/', requestUri, targetId));
+            }
+
+            // Assert
+            Assert.Throws<HttpRequestException>(() => response.EnsureSuccessStatusCode());
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         private async Task<int> GetTheNumberOfImages(string requestUri)
