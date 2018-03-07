@@ -140,6 +140,12 @@ namespace ImageGallery.API.Controllers
                 return new UnprocessableEntityObjectResult(ModelState);
             }
 
+            var imageFromRepo = galleryRepository.GetImage(id);
+            if (imageFromRepo == null)
+            {
+                return NotFound();
+            }
+
             // TODO implemente update procedure
 
             return NoContent();

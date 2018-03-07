@@ -369,7 +369,7 @@ namespace ImageGallery.API.Test.Controllers
         {
             // Arrange
             var requestUri = string.Join('/', baseUri, targetId);
-            var requestBody = CreateUpdateImageRequestBody();
+            var requestBody = CreateUpdateImageRequestBody(null);
 
             // Act
             HttpResponseMessage response = null;
@@ -383,11 +383,71 @@ namespace ImageGallery.API.Test.Controllers
             Assert.Equal(422, (int)response.StatusCode);
         }
 
-        private StringContent CreateUpdateImageRequestBody()
+        [Theory]
+        [InlineData("api/images", "ab46efdb-0384-400c-89cb-95bba1c500e9")]
+        public async void ShouldGetUnprocessableEntityObjectResultIfTitleIsEmpty(string baseUri, string targetId)
+        {
+            // Arrange
+            var requestUri = string.Join('/', baseUri, targetId);
+            var requestBody = CreateUpdateImageRequestBody("");
+
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.PutAsync(requestUri, requestBody);
+            }
+
+            // Assert
+            Assert.Throws<HttpRequestException>(() => response.EnsureSuccessStatusCode());
+            Assert.Equal(422, (int)response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("api/images", "ab46efdb-0384-400c-89cb-95bba1c500e9", 151)]
+        public async void ShouldGetUnprocessableEntityObjectResultIfTitleIsLongerThan(string baseUri, string targetId, int titleLength)
+        {
+            // Arrange
+            var requestUri = string.Join('/', baseUri, targetId);
+            var requestBody = CreateUpdateImageRequestBody(string.Concat(Enumerable.Repeat('a', titleLength)));
+
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.PutAsync(requestUri, requestBody);
+            }
+
+            // Assert
+            Assert.Throws<HttpRequestException>(() => response.EnsureSuccessStatusCode());
+            Assert.Equal(422, (int)response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("api/images", "ab4999db-0384-400c-89cb-95bba1c500ff")]
+        public async void ShouldGetNotFoundResponseIfInvalidIdProvided(string baseUri, string invalidId)
+        {
+            // Arrange
+            var requestUri = string.Join('/', baseUri, invalidId);
+            var requestBody = CreateUpdateImageRequestBody("NewTitle");
+
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.PutAsync(requestUri, requestBody);
+            }
+
+            // Assert
+            Assert.Throws<HttpRequestException>(() => response.EnsureSuccessStatusCode());
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        private StringContent CreateUpdateImageRequestBody(string title)
         {
             var data = new ImageForUpdate
             {
-                Title = null
+                Title = title
             };
             var serializedData = JsonConvert.SerializeObject(data);
             return new StringContent(serializedData, Encoding.Unicode, JsonContentType);
