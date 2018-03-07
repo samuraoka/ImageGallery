@@ -58,13 +58,14 @@ namespace ImageGallery.Model.Test
             Assert.Equal(150, (attrs[0] as MaxLengthAttribute).Length);
         }
 
-        [Fact]
-        public void ShouldSetGetBytesProperty()
+        [Theory]
+        [InlineData("../../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
+        public void ShouldSetGetBytesProperty(string testDataFilePath)
         {
             // Arrange
             // Best way to read a large file into a byte array in C#?
             // https://stackoverflow.com/questions/2030847/best-way-to-read-a-large-file-into-a-byte-array-in-c
-            var bytes = File.ReadAllBytes("../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg");
+            var bytes = File.ReadAllBytes(testDataFilePath);
             var obj = new ImageForCreation();
 
             // Act

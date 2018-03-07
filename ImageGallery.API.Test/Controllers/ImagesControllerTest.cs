@@ -97,7 +97,7 @@ namespace ImageGallery.API.Test.Controllers
         }
 
         [Theory]
-        [InlineData("api/images", "../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
+        [InlineData("api/images", "../../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
         public async Task ShouldAccessCreateImageMethod(string requestUri, string imageFilePath)
         {
             // Arrange
@@ -158,7 +158,7 @@ namespace ImageGallery.API.Test.Controllers
         }
 
         [Theory]
-        [InlineData("api/images", 151, "../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
+        [InlineData("api/images", 151, "../../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
         public async void ShouldGetUnprocessableEntityResponseIfImageTitleLengthOvers(string requestUri, int titleLength, string imageFilePath)
         {
             // Arrange
@@ -210,7 +210,7 @@ namespace ImageGallery.API.Test.Controllers
         }
 
         [Theory]
-        [InlineData("api/images", "../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
+        [InlineData("api/images", "../../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
         public async Task CouldUploadImageData(string requestUri, string imageFilePath)
         {
             // Arrange
