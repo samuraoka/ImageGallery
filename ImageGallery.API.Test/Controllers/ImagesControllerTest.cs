@@ -273,6 +273,22 @@ namespace ImageGallery.API.Test.Controllers
             Assert.Equal(expectedImage, samvedImage);
         }
 
+        [Theory]
+        [InlineData("api/images")]
+        public async void ShouldBeAbleToAccessDeleteImageMethod(string requestUri)
+        {
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.DeleteAsync(requestUri);
+                response.EnsureSuccessStatusCode();
+            }
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
         private async Task<int> GetTheNumberOfImages(string requestUri)
         {
             int numberOfImages = -1;

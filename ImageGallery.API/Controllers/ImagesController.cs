@@ -105,5 +105,11 @@ namespace ImageGallery.API.Controllers
             // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201
             return CreatedAtRoute("GetImage", new { id = imageToReturn.Id }, imageToReturn);
         }
+
+        [HttpDelete]
+        public IActionResult DeleteImage()
+        {
+            return NoContent();
+        }
     }
 }
