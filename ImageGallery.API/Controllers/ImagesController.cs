@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ImageGallery.API.Services;
+using ImageGallery.Model;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace ImageGallery.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateImage()
+        public IActionResult CreateImage([FromBody] ImageForCreation imageForCreation)
         {
             return Ok();
         }

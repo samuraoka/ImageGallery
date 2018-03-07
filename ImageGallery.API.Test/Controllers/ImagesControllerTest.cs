@@ -1,9 +1,13 @@
 ﻿using ImageGallery.API.Test.Fixture;
+using ImageGallery.Model;
 using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -27,17 +31,10 @@ namespace ImageGallery.API.Test.Controllers
         public async Task ShouldGetImages(string requestUri)
         {
             // Act
-            string responseString = null;
-            using (var client = server.CreateClient())
-            {
-                var response = await client.GetAsync(requestUri);
-                response.EnsureSuccessStatusCode();
-                responseString = await response.Content.ReadAsStringAsync();
-            }
-            var images = JsonConvert.DeserializeObject<IList<Model.Image>>(responseString) as IList<Model.Image>;
+            int numberOfImages = await GetTheNumberOfImages(requestUri);
 
             // Assert
-            Assert.Equal(14, images.Count);
+            Assert.Equal(14, numberOfImages);
         }
 
         [Theory]
@@ -77,14 +74,16 @@ namespace ImageGallery.API.Test.Controllers
         }
 
         [Theory]
-        [InlineData("api/images")]
-        public async Task ShouldAccessCreateImageMethod(string requestUri)
+        [InlineData("api/images", null)]
+        public async Task ShouldAccessCreateImageMethod(string requestUri, string imageFilePath)
         {
+            // Arrange
+            var content = await CreateUploadContent(imageFilePath);
+
             // Act
             HttpResponseMessage response = null;
             using (var client = server.CreateClient())
             {
-                HttpContent content = null;
                 response = await client.PostAsync(requestUri, content);
                 response.EnsureSuccessStatusCode();
             }
@@ -92,6 +91,81 @@ namespace ImageGallery.API.Test.Controllers
             // Assert
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("api/images")]
+        public async Task ShouldGetUnsupportedMediaTypeResponseIfMessageBodyNull(string requestUri)
+        {
+            // Arrange
+            HttpContent emptyContnet = null;
+
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.PostAsync(requestUri, emptyContnet);
+            }
+
+            // Assert
+            Assert.Throws<HttpRequestException>(() => response.EnsureSuccessStatusCode());
+            Assert.Equal(HttpStatusCode.UnsupportedMediaType, response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("api/images", "../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
+        public async Task CouldUploadImageData(string requestUri, string imageFilePath)
+        {
+            // Arrange
+            // Getting the number of images before uploading.
+            int expectedNumberOfImages = await GetTheNumberOfImages(requestUri);
+            expectedNumberOfImages += 1;
+            // Creating an upload data
+            var content = await CreateUploadContent(imageFilePath);
+
+            // Act
+            // Uploading...
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.PostAsync(requestUri, content);
+                response.EnsureSuccessStatusCode();
+            }
+            // Getting the count of images, second time...
+            int actualNumberofImages = await GetTheNumberOfImages(requestUri);
+
+            // Assert
+            Assert.Equal(expectedNumberOfImages, actualNumberofImages);
+        }
+
+        private async Task<int> GetTheNumberOfImages(string requestUri)
+        {
+            int numberOfImages = -1;
+            using (var client = server.CreateClient())
+            {
+                var res = await client.GetAsync(requestUri);
+                res.EnsureSuccessStatusCode();
+                var responseString = await res.Content.ReadAsStringAsync();
+                var images = JsonConvert.DeserializeObject<IList<Model.Image>>(responseString) as IList<Model.Image>;
+                numberOfImages = images.Count;
+            }
+            return numberOfImages;
+        }
+
+        private async Task<StringContent> CreateUploadContent(string imageFilePath)
+        {
+            output.WriteLine($"Current Directory: {Directory.GetCurrentDirectory()}");
+            var uploadData = new ImageForCreation
+            {
+                Title = "New Image " + Guid.NewGuid().ToString(),
+                Bytes = null,
+            };
+            if (imageFilePath != null)
+            {
+                uploadData.Bytes = await File.ReadAllBytesAsync(imageFilePath);
+            }
+            var serializedImageForCreation = JsonConvert.SerializeObject(uploadData);
+            return new StringContent(serializedImageForCreation, Encoding.Unicode, "application/json");
         }
     }
 }
