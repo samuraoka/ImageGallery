@@ -19,7 +19,12 @@
                 .ForMember(m => m.Id, options => options.Ignore())
                 .ForMember(m => m.OwnerId, options => options.Ignore());
 
-                // TODO do another setting
+                // Map from ImageForUpdate to Image
+                // ignore properties that shouldn't be mapped
+                cfg.CreateMap<Model.ImageForUpdate, Entities.Image>()
+                .ForMember(m => m.FileName, options => options.Ignore())
+                .ForMember(m => m.Id, options => options.Ignore())
+                .ForMember(m => m.OwnerId, options => options.Ignore());
             });
 
             AutoMapper.Mapper.AssertConfigurationIsValid();

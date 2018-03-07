@@ -127,9 +127,9 @@ namespace ImageGallery.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateImage(Guid id, [FromBody] ImageForUpdate iamgeForUpdate)
+        public IActionResult UpdateImage(Guid id, [FromBody] ImageForUpdate imageForUpdate)
         {
-            if (iamgeForUpdate == null)
+            if (imageForUpdate == null)
             {
                 return BadRequest();
             }
@@ -146,7 +146,14 @@ namespace ImageGallery.API.Controllers
                 return NotFound();
             }
 
-            // TODO implemente update procedure
+            Mapper.Map(imageForUpdate, imageFromRepo);
+
+            galleryRepository.UpdateImage(imageFromRepo);
+
+            if (galleryRepository.Save() == false)
+            {
+                throw new Exception($"Updating image with {id} failed on save.");
+            }
 
             return NoContent();
         }

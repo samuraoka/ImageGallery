@@ -443,6 +443,45 @@ namespace ImageGallery.API.Test.Controllers
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
+        [Theory]
+        [InlineData("api/images", "ab46efdb-0384-400c-89cb-95bba1c500e9", "NewImageTitle")]
+        public async void ShouldBeAbleToUpdateImage(string baseUri, string targetId, string newTitle)
+        {
+            // Arrange
+            var originalImage = await GetImage(baseUri, targetId);
+            var requestUri = string.Join('/', baseUri, targetId);
+            var expectedTitle = $"{newTitle}-{Guid.NewGuid()}";
+            var requestBody = CreateUpdateImageRequestBody(expectedTitle);
+
+            // Act
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                response = await client.PutAsync(requestUri, requestBody);
+                response.EnsureSuccessStatusCode();
+            }
+            var updatedImage = await GetImage(baseUri, targetId);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            Assert.Equal(targetId, updatedImage.Id.ToString());
+            Assert.NotEqual(originalImage.Title, updatedImage.Title);
+            Assert.Equal(expectedTitle, updatedImage.Title);
+        }
+
+        private async Task<Image> GetImage(string baseUri, string targetId)
+        {
+            HttpResponseMessage response = null;
+            using (var client = server.CreateClient())
+            {
+                var requestUri = string.Join('/', baseUri, targetId);
+                response = await client.GetAsync(requestUri);
+                response.EnsureSuccessStatusCode();
+            }
+            var responseString = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<Model.Image>(responseString) as Model.Image;
+        }
+
         private StringContent CreateUpdateImageRequestBody(string title)
         {
             var data = new ImageForUpdate
