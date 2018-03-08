@@ -28,7 +28,7 @@ namespace ImageGallery.Client.Controllers.Test
             {
                 // How to pass in a mocked HttpClient in a .NET test?
                 // https://stackoverflow.com/questions/22223223/how-to-pass-in-a-mocked-httpclient-in-a-net-test
-                var cli = new HttpClient(new AlwaysReturnNotFoundResponseHandler());
+                var cli = new HttpClient(new AlwaysReturnBadRequestResponseHandler());
                 cli.BaseAddress = new Uri("http://localhost/");
                 return cli;
             });
@@ -46,7 +46,7 @@ namespace ImageGallery.Client.Controllers.Test
 
     // How to pass in a mocked HttpClient in a .NET test?
     // https://stackoverflow.com/questions/22223223/how-to-pass-in-a-mocked-httpclient-in-a-net-test
-    internal class AlwaysReturnNotFoundResponseHandler : DelegatingHandler
+    internal class AlwaysReturnBadRequestResponseHandler : DelegatingHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
