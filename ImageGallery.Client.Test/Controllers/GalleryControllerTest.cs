@@ -106,6 +106,25 @@ namespace ImageGallery.Client.Controllers.Test
             Assert.Equal("A problem happend while calling the API: Because this client's handler always fails", exception.Message);
         }
 
+        [Fact]
+        public async void ShouldGetEmptyViewModelWhenModelStateInvalid()
+        {
+            // Arrange
+            var client = GetMockOfIImageGalleryHttpClient(HttpStatusCode.OK);
+            var controller = new GalleryController(client.Object);
+            // Testing controller logic in ASP.NET Core
+            // https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/testing
+            controller.ModelState.AddModelError("Title", "Required");
+            var editImageViewModel = new EditImageViewModel();
+
+            // Act
+            var result = await controller.EditImage(editImageViewModel);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.Model);
+        }
+
         private Mock<IImageGalleryHttpClient> GetMockOfIImageGalleryHttpClient(HttpStatusCode code)
         {
             var mockClient = new Mock<IImageGalleryHttpClient>();

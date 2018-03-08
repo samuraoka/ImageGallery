@@ -58,9 +58,14 @@ namespace ImageGallery.Client
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
         }
 
-        public async Task EditImage(EditImageViewModel editImageViewModel)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditImage(EditImageViewModel editImageViewModel)
         {
-            //TODO implemente model validation process.
+            if (ModelState.IsValid == false)
+            {
+                return View();
+            }
 
             //TODO implement create data process
 
