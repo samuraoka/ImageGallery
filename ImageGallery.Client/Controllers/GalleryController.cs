@@ -1,21 +1,30 @@
-﻿using System;
-using System.Net.Http;
+﻿using ImageGallery.Client.Services;
+using System;
+using System.Threading.Tasks;
 
 namespace ImageGallery.Client
 {
     public class GalleryController
     {
-        public GalleryController()
+        private readonly IImageGalleryHttpClient imageGalleryHttpClient;
+
+        public GalleryController(IImageGalleryHttpClient imageGalleryHttpClient)
         {
+            this.imageGalleryHttpClient = imageGalleryHttpClient;
         }
 
-        public void Index()
+        public async Task Index()
         {
-            // TODO implemente index process
+            // call the API
+            var httpClient = imageGalleryHttpClient.GetClient();
 
-            var response = new HttpResponseMessage();
+            var response = await httpClient.GetAsync("api/images");
 
-            // TODO implemente index process
+            if (response.IsSuccessStatusCode)
+            {
+                // TODO implemente index process
+                return;
+            }
 
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
         }
