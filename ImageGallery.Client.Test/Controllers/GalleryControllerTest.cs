@@ -59,6 +59,21 @@ namespace ImageGallery.Client.Controllers.Test
             Assert.Equal(2, model.Images.Count());
         }
 
+        [Fact]
+        public async void ShouldGetExceptionWhenEditImageGetActionFails()
+        {
+            // Arrange
+            var mockClient = GetMockOfIImageGalleryHttpClient(HttpStatusCode.BadRequest);
+            var controller = new GalleryController(mockClient.Object);
+
+            // Act
+            var result = controller.EditImage(Guid.NewGuid());
+
+            // Assert
+            var exception = await Assert.ThrowsAsync<Exception>(() => result);
+            Assert.Equal("A problem happend while calling the API: Because this client's handler always fails", exception.Message);
+        }
+
         private Mock<IImageGalleryHttpClient> GetMockOfIImageGalleryHttpClient(HttpStatusCode code)
         {
             var mockClient = new Mock<IImageGalleryHttpClient>();

@@ -35,5 +35,17 @@ namespace ImageGallery.Client
 
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
         }
+
+        public async Task EditImage(Guid id)
+        {
+            // call the API
+            var httpClient = imageGalleryHttpClient.GetClient();
+            var response = await httpClient.GetAsync($"api/images/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                // TODO implemente response processing code
+            }
+            throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
+        }
     }
 }
