@@ -1,5 +1,6 @@
 ﻿using ImageGallery.Client.Controllers;
 using ImageGallery.Client.Services;
+using ImageGallery.Client.ViewModels;
 using ImageGallery.Model;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -36,14 +37,22 @@ namespace ImageGallery.Client
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
         }
 
-        public async Task EditImage(Guid id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> EditImage(Guid id)
         {
             // call the API
             var httpClient = imageGalleryHttpClient.GetClient();
             var response = await httpClient.GetAsync($"api/images/{id}");
             if (response.IsSuccessStatusCode)
             {
-                // TODO implemente response processing code
+                var imageAsString = await response.Content.ReadAsStringAsync();
+                var image = JsonConvert.DeserializeObject<Image>(imageAsString);
+                var editImageViewModel = new EditImageViewModel
+                {
+                    Id = image.Id,
+                    Title = image.Title,
+                };
+                return View(editImageViewModel);
             }
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
         }

@@ -1,7 +1,7 @@
 ﻿using ImageGallery.Model;
 using System.Collections.Generic;
 
-namespace ImageGallery.Client.Controllers
+namespace ImageGallery.Client.ViewModels
 {
     public class GalleryIndexViewModel
     {

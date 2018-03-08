@@ -1,4 +1,5 @@
 ﻿using ImageGallery.Client.Services;
+using ImageGallery.Client.ViewModels;
 using ImageGallery.Model;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -18,6 +19,8 @@ namespace ImageGallery.Client.Controllers.Test
 {
     public class GalleryControllerTest
     {
+        public const string httpClientBaseAddress = "http://localhost/";
+
         public ITestOutputHelper Output { get; }
 
         public GalleryControllerTest(ITestOutputHelper output)
@@ -74,6 +77,24 @@ namespace ImageGallery.Client.Controllers.Test
             Assert.Equal("A problem happend while calling the API: Because this client's handler always fails", exception.Message);
         }
 
+        [Fact]
+        public async void ShouldGetEditImageViewModelWhenEditImageActionSuceeds()
+        {
+            // Arrange
+            var mockClient = GetMockOfIImageGalleryHttpClient(HttpStatusCode.OK);
+            var controller = new GalleryController(mockClient.Object);
+            var expectedId = Guid.NewGuid();
+
+            // Adt
+            var result = await controller.EditImage(expectedId);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<EditImageViewModel>(viewResult.Model);
+            Assert.Equal(expectedId, model.Id);
+            Assert.Equal("Dummy Title", model.Title);
+        }
+
         private Mock<IImageGalleryHttpClient> GetMockOfIImageGalleryHttpClient(HttpStatusCode code)
         {
             var mockClient = new Mock<IImageGalleryHttpClient>();
@@ -82,7 +103,7 @@ namespace ImageGallery.Client.Controllers.Test
                 // How to pass in a mocked HttpClient in a .NET test?
                 // https://stackoverflow.com/questions/22223223/how-to-pass-in-a-mocked-httpclient-in-a-net-test
                 var cli = new HttpClient(new FakeHttpMessageHandler(code));
-                cli.BaseAddress = new Uri("http://localhost/");
+                cli.BaseAddress = new Uri(httpClientBaseAddress);
                 return cli;
             });
             return mockClient;
@@ -113,27 +134,45 @@ namespace ImageGallery.Client.Controllers.Test
 
                 case HttpStatusCode.OK:
                     result.ReasonPhrase = "OK";
-                    var images = new List<Image>
-                    {
-                        new Image()
-                        {
-                            Id = new Guid("9f35e705-637a-4bbe-8c35-402b2ecf7128"),
-                            Title = "An image by Frank",
-                            FileName = "4cdd494c-e6e1-4af1-9e54-24a8e80ea2b4.jpg",
-                        },
-                        new Image()
-                        {
-                            Id = new Guid("939df3fd-de57-4caf-96dc-c5e110322a96"),
-                            Title = "An image by Frank",
-                            FileName = "5c20ca95-bb00-4ef1-8b85-c4b11e66eb54.jpg",
-                        },
-                    };
-                    string content = JsonConvert.SerializeObject(images);
+                    string content = GetContent(request);
                     result.Content = new StringContent(content, Encoding.Unicode, "application/json");
                     break;
             }
 
             return Task.FromResult(result);
+        }
+
+        private string GetContent(HttpRequestMessage request)
+        {
+            object content = null;
+            if (request.RequestUri.ToString().Equals(GalleryControllerTest.httpClientBaseAddress + "api/images"))
+            {
+                content = new List<Image> {
+                    new Image
+                    {
+                        Id = new Guid("9f35e705-637a-4bbe-8c35-402b2ecf7128"),
+                        Title = "An image by Frank",
+                        FileName = "4cdd494c-e6e1-4af1-9e54-24a8e80ea2b4.jpg",
+                    },
+                    new Image
+                    {
+                        Id = new Guid("939df3fd-de57-4caf-96dc-c5e110322a96"),
+                        Title = "An image by Frank",
+                        FileName = "5c20ca95-bb00-4ef1-8b85-c4b11e66eb54.jpg",
+                    },
+                };
+            }
+            else
+            {
+                var segs = request.RequestUri.Segments;
+                content = new Image
+                {
+                    Id = new Guid(segs.Last()),
+                    Title = "Dummy Title",
+                    FileName = "DummyFileName.jpg",
+                };
+            }
+            return JsonConvert.SerializeObject(content);
         }
     }
 }
