@@ -90,6 +90,22 @@ namespace ImageGallery.Client.Controllers.Test
             Assert.Equal("Dummy Title", model.Title);
         }
 
+        [Fact]
+        public async void ShouldGetExceptionWhenEditImagePostActionFails()
+        {
+            // Arrange
+            var client = GetMockOfIImageGalleryHttpClient(HttpStatusCode.BadRequest);
+            var controller = new GalleryController(client.Object);
+            var editImageViewModel = new EditImageViewModel();
+
+            // Action
+            var result = controller.EditImage(editImageViewModel);
+
+            // Assert
+            var exception = await Assert.ThrowsAsync<Exception>(() => result);
+            Assert.Equal("A problem happend while calling the API: Because this client's handler always fails", exception.Message);
+        }
+
         private Mock<IImageGalleryHttpClient> GetMockOfIImageGalleryHttpClient(HttpStatusCode code)
         {
             var mockClient = new Mock<IImageGalleryHttpClient>();

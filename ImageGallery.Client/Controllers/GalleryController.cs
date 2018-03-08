@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ImageGallery.Client
@@ -56,5 +57,25 @@ namespace ImageGallery.Client
             }
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
         }
+
+        public async Task EditImage(EditImageViewModel editImageViewModel)
+        {
+            //TODO implemente model validation process.
+
+            //TODO implement create data process
+
+            // call the API
+            var httpClient = imageGalleryHttpClient.GetClient();
+            var response = await httpClient.PutAsync("", new StringContent(""));
+
+            if (response.IsSuccessStatusCode)
+            {
+                //TODO return action object
+            }
+
+            throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
+        }
+
+        //TODO implement other action methods.
     }
 }
