@@ -36,7 +36,7 @@ namespace ImageGallery.Client.Controllers.Test
             var task = controller.Index();
 
             // Assert
-            var exception = await Assert.ThrowsAsync<Exception>(async () => await task);
+            var exception = await Assert.ThrowsAsync<Exception>(() => task);
             Output.WriteLine($"exception message: {exception.Message}");
             Assert.Equal("A problem happend while calling the API: Because this client's handler always fails", exception.Message);
         }
