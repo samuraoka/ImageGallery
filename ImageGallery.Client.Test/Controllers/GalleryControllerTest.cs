@@ -29,15 +29,7 @@ namespace ImageGallery.Client.Controllers.Test
         public async void ShouldGetExceptionWhenIndexActionFails()
         {
             // Arrange
-            var mockClient = new Mock<IImageGalleryHttpClient>();
-            mockClient.Setup(m => m.GetClient()).Returns(() =>
-            {
-                // How to pass in a mocked HttpClient in a .NET test?
-                // https://stackoverflow.com/questions/22223223/how-to-pass-in-a-mocked-httpclient-in-a-net-test
-                var cli = new HttpClient(new FakeHttpMessageHandler(HttpStatusCode.BadRequest));
-                cli.BaseAddress = new Uri("http://localhost/");
-                return cli;
-            });
+            var mockClient = GetMockOfIImageGalleryHttpClient(HttpStatusCode.BadRequest);
             var controller = new GalleryController(mockClient.Object);
 
             // Act
@@ -53,15 +45,7 @@ namespace ImageGallery.Client.Controllers.Test
         public async void ShouldGetGalleryIndexViewModelWhenIndexActionSuceeds()
         {
             // Arrange
-            var mockClient = new Mock<IImageGalleryHttpClient>();
-            mockClient.Setup(m => m.GetClient()).Returns(() =>
-            {
-                // How to pass in a mocked HttpClient in a .NET test?
-                // https://stackoverflow.com/questions/22223223/how-to-pass-in-a-mocked-httpclient-in-a-net-test
-                var cli = new HttpClient(new FakeHttpMessageHandler(HttpStatusCode.OK));
-                cli.BaseAddress = new Uri("http://localhost/");
-                return cli;
-            });
+            var mockClient = GetMockOfIImageGalleryHttpClient(HttpStatusCode.OK);
             var controller = new GalleryController(mockClient.Object);
 
             // Act
@@ -73,6 +57,20 @@ namespace ImageGallery.Client.Controllers.Test
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<GalleryIndexViewModel>(viewResult.Model);
             Assert.Equal(2, model.Images.Count());
+        }
+
+        private Mock<IImageGalleryHttpClient> GetMockOfIImageGalleryHttpClient(HttpStatusCode code)
+        {
+            var mockClient = new Mock<IImageGalleryHttpClient>();
+            mockClient.Setup(m => m.GetClient()).Returns(() =>
+            {
+                // How to pass in a mocked HttpClient in a .NET test?
+                // https://stackoverflow.com/questions/22223223/how-to-pass-in-a-mocked-httpclient-in-a-net-test
+                var cli = new HttpClient(new FakeHttpMessageHandler(code));
+                cli.BaseAddress = new Uri("http://localhost/");
+                return cli;
+            });
+            return mockClient;
         }
     }
 
