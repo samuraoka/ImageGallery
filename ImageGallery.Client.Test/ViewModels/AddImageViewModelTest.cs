@@ -1,6 +1,7 @@
 ﻿using ImageGallery.Client.ViewModels;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Xunit;
 
 namespace ImageGallery.Client.Test.ViewModels
@@ -60,6 +61,22 @@ namespace ImageGallery.Client.Test.ViewModels
             Assert.IsType<string>(instance.Title);
             Assert.Same(t, instance.Title);
             Assert.Equal("NewImageTitle", t);
+        }
+
+        [Fact]
+        public void ShouldGetRequiredAttributeFromTitleProperty()
+        {
+            // Arrange
+            var propertyInfo = typeof(AddImageViewModel).GetProperty(nameof(AddImageViewModel.Title));
+
+            // Act
+            var attrs = propertyInfo.GetCustomAttributes(typeof(RequiredAttribute), false);
+
+            // Assert
+            Assert.NotNull(attrs);
+            Assert.IsType<RequiredAttribute[]>(attrs);
+            Assert.Single(attrs);
+            Assert.IsType<RequiredAttribute>(attrs[0]);
         }
     }
 }
