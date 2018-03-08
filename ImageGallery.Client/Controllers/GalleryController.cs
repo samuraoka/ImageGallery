@@ -88,13 +88,16 @@ namespace ImageGallery.Client
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
         }
 
-        public async Task DeleteImage(Guid id)
+        public async Task<IActionResult> DeleteImage(Guid id)
         {
             // call the API
             var httpClient = imageGalleryHttpClient.GetClient();
-            var response = await httpClient.DeleteAsync("");
+            var response = await httpClient.DeleteAsync($"api/images/{id}");
 
-            //TODO write a code
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
 
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
         }

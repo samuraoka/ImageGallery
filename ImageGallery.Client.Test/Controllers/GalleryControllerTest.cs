@@ -161,6 +161,22 @@ namespace ImageGallery.Client.Controllers.Test
             Assert.Equal("A problem happend while calling the API: Because this client's handler always fails", exception.Message);
         }
 
+        [Fact]
+        public async void ShouldGetRedirectToActionResultWhenDeleteImageMethodSucceeds()
+        {
+            // Arrange
+            var client = GetMockOfIImageGalleryHttpClient(HttpStatusCode.OK);
+            var controller = new GalleryController(client.Object);
+            var id = Guid.NewGuid();
+
+            // Act
+            var response = await controller.DeleteImage(id);
+
+            // Assert
+            var result = Assert.IsType<RedirectToActionResult>(response);
+            Assert.Equal("Index", result.ActionName);
+        }
+
         private Mock<IImageGalleryHttpClient> GetMockOfIImageGalleryHttpClient(HttpStatusCode code)
         {
             var mockClient = new Mock<IImageGalleryHttpClient>();
@@ -168,7 +184,7 @@ namespace ImageGallery.Client.Controllers.Test
             {
                 // How to pass in a mocked HttpClient in a .NET test?
                 // https://stackoverflow.com/questions/22223223/how-to-pass-in-a-mocked-httpclient-in-a-net-test
-                var cli = new HttpClient(new FakeHttpMessageHandler(code));
+                var cli = new HttpClient(new MockImageGalleryApiHandler(code));
                 cli.BaseAddress = new Uri(httpClientBaseAddress);
                 return cli;
             });

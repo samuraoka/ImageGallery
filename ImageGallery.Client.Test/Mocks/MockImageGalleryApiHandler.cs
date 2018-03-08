@@ -67,16 +67,25 @@ namespace ImageGallery.Client.Test.Mocks
 
         private HttpResponseMessage DoPutProcessing(HttpRequestMessage request, HttpResponseMessage response)
         {
-            switch (statusCode)
+            try
             {
-                case HttpStatusCode.OK:
-                    response.StatusCode = HttpStatusCode.OK;
-                    break;
+                var guid = Guid.Parse(request.RequestUri.Segments.Last());
+                switch (statusCode)
+                {
+                    case HttpStatusCode.OK:
+                        response.StatusCode = HttpStatusCode.OK;
+                        break;
 
-                default:
-                    response.ReasonPhrase = ErrorMessage;
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                    break;
+                    default:
+                        response.ReasonPhrase = ErrorMessage;
+                        response.StatusCode = HttpStatusCode.BadRequest;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.ReasonPhrase = "Request URI need a valid GUID to be updated or deleted.";
+                response.StatusCode = HttpStatusCode.BadRequest;
             }
             return response;
         }
