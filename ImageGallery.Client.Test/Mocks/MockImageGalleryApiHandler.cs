@@ -13,7 +13,7 @@ namespace ImageGallery.Client.Test.Mocks
 {
     // How to pass in a mocked HttpClient in a .NET test?
     // https://stackoverflow.com/questions/22223223/how-to-pass-in-a-mocked-httpclient-in-a-net-test
-    internal class FakeHttpMessageHandler : DelegatingHandler
+    internal class MockImageGalleryApiHandler : DelegatingHandler
     {
         private const string ErrorMessage = "Because this client's handler always fails";
         private const string ApplicationJson = "application/json";
@@ -22,7 +22,7 @@ namespace ImageGallery.Client.Test.Mocks
         private const string PathWithoutBeforeSlash = "api/images/";
         private readonly HttpStatusCode statusCode;
 
-        public FakeHttpMessageHandler(HttpStatusCode code)
+        public MockImageGalleryApiHandler(HttpStatusCode code)
         {
             statusCode = code;
         }
