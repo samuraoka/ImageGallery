@@ -110,8 +110,13 @@ namespace ImageGallery.Client
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task AddImage(AddImageViewModel addImageViewModel)
+        public async Task<IActionResult> AddImage(AddImageViewModel addImageViewModel)
         {
+            if (ModelState.IsValid == false)
+            {
+                return View();
+            }
+
             // TODO implement add iamge procedure
 
             // call the API
