@@ -1,5 +1,4 @@
-﻿using ImageGallery.Client.Controllers;
-using ImageGallery.Client.Services;
+﻿using ImageGallery.Client.Services;
 using ImageGallery.Client.ViewModels;
 using ImageGallery.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -85,6 +84,17 @@ namespace ImageGallery.Client
             {
                 return RedirectToAction("Index");
             }
+
+            throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
+        }
+
+        public async Task DeleteImage(Guid id)
+        {
+            // call the API
+            var httpClient = imageGalleryHttpClient.GetClient();
+            var response = await httpClient.DeleteAsync("");
+
+            //TODO write a code
 
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
         }
