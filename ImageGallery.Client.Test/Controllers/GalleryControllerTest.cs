@@ -125,6 +125,26 @@ namespace ImageGallery.Client.Controllers.Test
             Assert.Null(viewResult.Model);
         }
 
+        [Fact]
+        public async void ShouldGetRedirectToActionResultWhenEditImagePostHttpMethodSucceeds()
+        {
+            // Arrange
+            var client = GetMockOfIImageGalleryHttpClient(HttpStatusCode.OK);
+            var controller = new GalleryController(client.Object);
+            var editImageViewModel = new EditImageViewModel
+            {
+                Id = Guid.NewGuid(),
+                Title = "New Image Title",
+            };
+
+            // Act
+            var response = await controller.EditImage(editImageViewModel);
+
+            // Assert
+            var result = Assert.IsType<RedirectToActionResult>(response);
+            Assert.Equal("Index", result.ActionName);
+        }
+
         private Mock<IImageGalleryHttpClient> GetMockOfIImageGalleryHttpClient(HttpStatusCode code)
         {
             var mockClient = new Mock<IImageGalleryHttpClient>();

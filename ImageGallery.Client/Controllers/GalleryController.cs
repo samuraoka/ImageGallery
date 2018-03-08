@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ImageGallery.Client
@@ -67,15 +68,22 @@ namespace ImageGallery.Client
                 return View();
             }
 
-            //TODO implement create data process
+            // create an ImageForUpdate instatnce
+            var imageForUpdate = new ImageForUpdate
+            {
+                Title = editImageViewModel.Title,
+            };
+            var serializedImageForUpdate = JsonConvert.SerializeObject(imageForUpdate);
 
             // call the API
             var httpClient = imageGalleryHttpClient.GetClient();
-            var response = await httpClient.PutAsync("", new StringContent(""));
+            var requestUri = $"api/images/{editImageViewModel.Id}";
+            var content = new StringContent(serializedImageForUpdate, Encoding.Unicode, "application/json");
+            var response = await httpClient.PutAsync(requestUri, content);
 
             if (response.IsSuccessStatusCode)
             {
-                //TODO return action object
+                return RedirectToAction("Index");
             }
 
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
