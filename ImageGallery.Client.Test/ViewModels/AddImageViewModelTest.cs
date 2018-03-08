@@ -17,5 +17,19 @@ namespace ImageGallery.Client.Test.ViewModels
             Assert.NotNull(instance);
             Assert.IsType<AddImageViewModel>(instance);
         }
+
+        [Fact]
+        public void ShouldBeAbleToSetGetFiles()
+        {
+            // Arrange
+            var instance = new AddImageViewModel();
+            var files = new List<IFormFile>();
+
+            // Act
+            instance.Files = files;
+
+            // Assert
+            Assert.Same(files, instance.Files);
+        }
     }
 }
