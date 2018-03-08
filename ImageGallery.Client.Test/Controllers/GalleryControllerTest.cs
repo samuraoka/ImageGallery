@@ -28,7 +28,7 @@ namespace ImageGallery.Client.Controllers.Test
             {
                 // How to pass in a mocked HttpClient in a .NET test?
                 // https://stackoverflow.com/questions/22223223/how-to-pass-in-a-mocked-httpclient-in-a-net-test
-                var cli = new HttpClient(new AlwaysReturnBadRequestResponseHandler());
+                var cli = new HttpClient(new FakeHttpMessageHandler(HttpStatusCode.BadRequest));
                 cli.BaseAddress = new Uri("http://localhost/");
                 return cli;
             });
@@ -46,13 +46,27 @@ namespace ImageGallery.Client.Controllers.Test
 
     // How to pass in a mocked HttpClient in a .NET test?
     // https://stackoverflow.com/questions/22223223/how-to-pass-in-a-mocked-httpclient-in-a-net-test
-    internal class AlwaysReturnBadRequestResponseHandler : DelegatingHandler
+    internal class FakeHttpMessageHandler : DelegatingHandler
     {
+        private readonly HttpStatusCode statusCode;
+
+        public FakeHttpMessageHandler(HttpStatusCode code)
+        {
+            statusCode = code;
+        }
+
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var result = new HttpResponseMessage(HttpStatusCode.BadRequest);
+            var result = new HttpResponseMessage(statusCode);
             result.RequestMessage = request;
-            result.ReasonPhrase = "Because this client's handler always fails";
+
+            switch (statusCode)
+            {
+                case HttpStatusCode.BadRequest:
+                    result.ReasonPhrase = "Because this client's handler always fails";
+                    break;
+            }
+
             return Task.FromResult(result);
         }
     }
