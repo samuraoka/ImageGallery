@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -117,14 +119,36 @@ namespace ImageGallery.Client
                 return View();
             }
 
-            // TODO implement add iamge procedure
+            // create an ImageForCreation instance
+            var imageForCreation = new ImageForCreation
+            {
+                Title = addImageViewModel.Title,
+            };
+
+            // take the first (only) file in the Files list
+            var imageFile = addImageViewModel.Files.First();
+            if (imageFile.Length > 0)
+            {
+                using (var fileStrem = imageFile.OpenReadStream())
+                using (var ms = new MemoryStream())
+                {
+                    await fileStrem.CopyToAsync(ms);
+                    imageForCreation.Bytes = ms.ToArray();
+                }
+            }
+
+            // serialize it
+            var serializedImageForCreation = JsonConvert.SerializeObject(imageForCreation);
 
             // call the API
             var httpClient = imageGalleryHttpClient.GetClient();
-            var content = new StringContent("", Encoding.Unicode, ApplicationJsonMediaType);
+            var content = new StringContent(serializedImageForCreation, Encoding.Unicode, ApplicationJsonMediaType);
             var response = await httpClient.PostAsync("api/images", content);
 
-            // TODO implement add iamge procedure
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
 
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
         }

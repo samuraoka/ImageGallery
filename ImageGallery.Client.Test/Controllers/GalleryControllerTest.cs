@@ -1,12 +1,15 @@
 ﻿using ImageGallery.Client.Services;
 using ImageGallery.Client.Test.Mocks;
 using ImageGallery.Client.ViewModels;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -199,6 +202,7 @@ namespace ImageGallery.Client.Controllers.Test
             var client = GetMockOfIImageGalleryHttpClient(HttpStatusCode.BadRequest);
             var controller = new GalleryController(client.Object);
             var addImageViewModel = new AddImageViewModel();
+            addImageViewModel.Files.Add(await GetFormFileAsync());
 
             // Act
             var result = controller.AddImage(addImageViewModel);
@@ -223,6 +227,35 @@ namespace ImageGallery.Client.Controllers.Test
             // Assert
             var viewResult = Assert.IsType<ViewResult>(response);
             Assert.Null(viewResult.Model);
+        }
+
+        [Fact]
+        public async void ShouldGetRedirectToActionResultWhenAddImagePostMethodSucceeds()
+        {
+            // Arrange
+            var client = GetMockOfIImageGalleryHttpClient(HttpStatusCode.OK);
+            var controller = new GalleryController(client.Object);
+            var addImageViewModel = new AddImageViewModel
+            {
+                Title = "New Image Title",
+            };
+            addImageViewModel.Files.Add(await GetFormFileAsync());
+
+            // Action
+            var response = await controller.AddImage(addImageViewModel);
+
+            // Assert
+            var result = Assert.IsType<RedirectToActionResult>(response);
+            Assert.Equal("Index", result.ActionName);
+        }
+
+        private static async Task<FormFile> GetFormFileAsync()
+        {
+            var buffer = await File.ReadAllBytesAsync("../../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg");
+            var baseStream = new MemoryStream(buffer);
+            var file = new FormFile(baseStream, baseStreamOffset: 0, length: buffer.Length,
+                name: "6b33c074-65cf-4f2b-913a-1b2d4deb7050", fileName: "6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg");
+            return file;
         }
 
         private Mock<IImageGalleryHttpClient> GetMockOfIImageGalleryHttpClient(HttpStatusCode code)
