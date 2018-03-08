@@ -102,6 +102,11 @@ namespace ImageGallery.Client
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
         }
 
+        public IActionResult AddImage()
+        {
+            return View();
+        }
+
         //TODO implement other action methods.
     }
 }

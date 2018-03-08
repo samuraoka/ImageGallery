@@ -177,6 +177,21 @@ namespace ImageGallery.Client.Controllers.Test
             Assert.Equal("Index", result.ActionName);
         }
 
+        [Fact]
+        public void ShouldGetViewResultWhenAddImageGetMethodSucceeds()
+        {
+            // Arrange
+            var client = GetMockOfIImageGalleryHttpClient(HttpStatusCode.OK);
+            var controller = new GalleryController(client.Object);
+
+            // Act
+            var result = controller.AddImage();
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.Model);
+        }
+
         private Mock<IImageGalleryHttpClient> GetMockOfIImageGalleryHttpClient(HttpStatusCode code)
         {
             var mockClient = new Mock<IImageGalleryHttpClient>();
