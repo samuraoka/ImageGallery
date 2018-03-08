@@ -1,8 +1,14 @@
 ﻿using ImageGallery.Client.Services;
+using ImageGallery.Model;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -42,6 +48,32 @@ namespace ImageGallery.Client.Controllers.Test
             Output.WriteLine($"exception message: {exception.Message}");
             Assert.Equal("A problem happend while calling the API: Because this client's handler always fails", exception.Message);
         }
+
+        [Fact]
+        public async void ShouldGetGalleryIndexViewModelWhenIndexActionSuceeds()
+        {
+            // Arrange
+            var mockClient = new Mock<IImageGalleryHttpClient>();
+            mockClient.Setup(m => m.GetClient()).Returns(() =>
+            {
+                // How to pass in a mocked HttpClient in a .NET test?
+                // https://stackoverflow.com/questions/22223223/how-to-pass-in-a-mocked-httpclient-in-a-net-test
+                var cli = new HttpClient(new FakeHttpMessageHandler(HttpStatusCode.OK));
+                cli.BaseAddress = new Uri("http://localhost/");
+                return cli;
+            });
+            var controller = new GalleryController(mockClient.Object);
+
+            // Act
+            // Testing controller logic in ASP.NET Core
+            // https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/testing
+            var result = await controller.Index();
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<GalleryIndexViewModel>(viewResult.Model);
+            Assert.Equal(2, model.Images.Count());
+        }
     }
 
     // How to pass in a mocked HttpClient in a .NET test?
@@ -64,6 +96,27 @@ namespace ImageGallery.Client.Controllers.Test
             {
                 case HttpStatusCode.BadRequest:
                     result.ReasonPhrase = "Because this client's handler always fails";
+                    break;
+
+                case HttpStatusCode.OK:
+                    result.ReasonPhrase = "OK";
+                    var images = new List<Image>
+                    {
+                        new Image()
+                        {
+                            Id = new Guid("9f35e705-637a-4bbe-8c35-402b2ecf7128"),
+                            Title = "An image by Frank",
+                            FileName = "4cdd494c-e6e1-4af1-9e54-24a8e80ea2b4.jpg",
+                        },
+                        new Image()
+                        {
+                            Id = new Guid("939df3fd-de57-4caf-96dc-c5e110322a96"),
+                            Title = "An image by Frank",
+                            FileName = "5c20ca95-bb00-4ef1-8b85-c4b11e66eb54.jpg",
+                        },
+                    };
+                    string content = JsonConvert.SerializeObject(images);
+                    result.Content = new StringContent(content, Encoding.Unicode, "application/json");
                     break;
             }
 
