@@ -31,5 +31,19 @@ namespace ImageGallery.Client.Test.ViewModels
             // Assert
             Assert.Same(files, instance.Files);
         }
+
+        [Fact]
+        public void ShouldGetFilesPropertyAfterCreation()
+        {
+            // Arrange
+            var instance = new AddImageViewModel();
+
+            // Act
+            var files = instance.Files;
+
+            // Assert
+            Assert.NotNull(files);
+            Assert.IsType<List<IFormFile>>(files);
+        }
     }
 }

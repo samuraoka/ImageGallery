@@ -5,7 +5,7 @@ namespace ImageGallery.Client.ViewModels
 {
     public class AddImageViewModel
     {
-        public List<IFormFile> Files { get; set; }
+        public List<IFormFile> Files { get; set; } = new List<IFormFile>();
 
         public AddImageViewModel()
         {
