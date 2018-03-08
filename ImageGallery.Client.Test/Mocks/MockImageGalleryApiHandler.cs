@@ -52,6 +52,10 @@ namespace ImageGallery.Client.Test.Mocks
                     response = DoDeleteProcessing(request, response);
                     break;
 
+                case "POST":
+                    response = DoPostProcessing(request, response);
+                    break;
+
                 default:
                     response.StatusCode = HttpStatusCode.NotFound;
                     break;
@@ -60,32 +64,48 @@ namespace ImageGallery.Client.Test.Mocks
             return Task.FromResult(response);
         }
 
+        private HttpResponseMessage DoPostProcessing(HttpRequestMessage request, HttpResponseMessage response)
+        {
+            return DoPostPutDeleteCommonProcessing(response);
+        }
+
         private HttpResponseMessage DoDeleteProcessing(HttpRequestMessage request, HttpResponseMessage response)
         {
-            return DoPutProcessing(request, response);
+            return DoPutDeleteCommonProcessing(request, response);
         }
 
         private HttpResponseMessage DoPutProcessing(HttpRequestMessage request, HttpResponseMessage response)
         {
+            return DoPutDeleteCommonProcessing(request, response);
+        }
+
+        private HttpResponseMessage DoPutDeleteCommonProcessing(HttpRequestMessage request, HttpResponseMessage response)
+        {
             try
             {
                 var guid = Guid.Parse(request.RequestUri.Segments.Last());
-                switch (statusCode)
-                {
-                    case HttpStatusCode.OK:
-                        response.StatusCode = HttpStatusCode.OK;
-                        break;
-
-                    default:
-                        response.ReasonPhrase = ErrorMessage;
-                        response.StatusCode = HttpStatusCode.BadRequest;
-                        break;
-                }
+                DoPostPutDeleteCommonProcessing(response);
             }
             catch (Exception ex)
             {
                 response.ReasonPhrase = $"Request URI need a valid GUID to be updated or deleted. {ex.Message}";
                 response.StatusCode = HttpStatusCode.BadRequest;
+            }
+            return response;
+        }
+
+        private HttpResponseMessage DoPostPutDeleteCommonProcessing(HttpResponseMessage response)
+        {
+            switch (statusCode)
+            {
+                case HttpStatusCode.OK:
+                    response.StatusCode = HttpStatusCode.OK;
+                    break;
+
+                default:
+                    response.ReasonPhrase = ErrorMessage;
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    break;
             }
             return response;
         }

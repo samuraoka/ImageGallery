@@ -13,6 +13,7 @@ namespace ImageGallery.Client
 {
     public class GalleryController : Controller
     {
+        private const string ApplicationJsonMediaType = "application/json";
         private readonly IImageGalleryHttpClient imageGalleryHttpClient;
 
         public GalleryController(IImageGalleryHttpClient imageGalleryHttpClient)
@@ -77,7 +78,7 @@ namespace ImageGallery.Client
             // call the API
             var httpClient = imageGalleryHttpClient.GetClient();
             var requestUri = $"api/images/{editImageViewModel.Id}";
-            var content = new StringContent(serializedImageForUpdate, Encoding.Unicode, "application/json");
+            var content = new StringContent(serializedImageForUpdate, Encoding.Unicode, ApplicationJsonMediaType);
             var response = await httpClient.PutAsync(requestUri, content);
 
             if (response.IsSuccessStatusCode)
@@ -107,6 +108,20 @@ namespace ImageGallery.Client
             return View();
         }
 
-        //TODO implement other action methods.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task AddImage(AddImageViewModel addImageViewModel)
+        {
+            // TODO implement add iamge procedure
+
+            // call the API
+            var httpClient = imageGalleryHttpClient.GetClient();
+            var content = new StringContent("", Encoding.Unicode, ApplicationJsonMediaType);
+            var response = await httpClient.PostAsync("api/images", content);
+
+            // TODO implement add iamge procedure
+
+            throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
+        }
     }
 }
