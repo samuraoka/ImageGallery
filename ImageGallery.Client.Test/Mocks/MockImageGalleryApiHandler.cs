@@ -84,7 +84,7 @@ namespace ImageGallery.Client.Test.Mocks
             }
             catch (Exception ex)
             {
-                response.ReasonPhrase = "Request URI need a valid GUID to be updated or deleted.";
+                response.ReasonPhrase = $"Request URI need a valid GUID to be updated or deleted. {ex.Message}";
                 response.StatusCode = HttpStatusCode.BadRequest;
             }
             return response;
