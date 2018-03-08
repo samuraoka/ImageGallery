@@ -45,5 +45,21 @@ namespace ImageGallery.Client.Test.ViewModels
             Assert.NotNull(files);
             Assert.IsType<List<IFormFile>>(files);
         }
+
+        [Fact]
+        public void ShouldSetGetTitleProperty()
+        {
+            // Arrange
+            var instance = new AddImageViewModel();
+
+            // Act
+            instance.Title = "NewImageTitle";
+            var t = instance.Title;
+
+            // Assert
+            Assert.IsType<string>(instance.Title);
+            Assert.Same(t, instance.Title);
+            Assert.Equal("NewImageTitle", t);
+        }
     }
 }
