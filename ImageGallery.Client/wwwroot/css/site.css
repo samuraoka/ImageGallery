@@ -10,6 +10,8 @@
     padding-right: 15px;
 }
 
+/*TODO add here some settings*/
+
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
@@ -21,15 +23,24 @@
     width: 100%;
 }
 
-/* QR code generator */
-#qrCode {
-    margin: 15px;
-}
-
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
     .carousel-caption {
         display: none;
     }
+}
+
+/*TODO add here some settings*/
+
+.bottomMarginDefault {
+    margin-bottom: 30px;
+}
+
+/*TODO add here some settings*/
+
+.thumbnailImage {
+    max-width: 400px;
+    width: 100%;
+    height: auto;
 }
