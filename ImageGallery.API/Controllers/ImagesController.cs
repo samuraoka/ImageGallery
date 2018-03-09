@@ -71,6 +71,7 @@ namespace ImageGallery.API.Controllers
 
             // Automapper maps only the Title in our configuration
             var imageEntity = Mapper.Map<Entities.Image>(imageForCreation);
+            imageEntity.OwnerId = Guid.NewGuid().ToString(); //TODO:Fix Added Random Owner ID for quick fix purpose
 
             // Create an iamge from the passed-in bytes (Base64), and
             // set the filename on the image
