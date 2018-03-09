@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="copy $(ProjectDir)\node_modules\bootstrap\dist\css\bootstrap.css $(ProjectDir)\wwwroot\css&#xD;&#xA;copy $(ProjectDir)\node_modules\bootstrap\dist\css\bootstrap.css.map $(ProjectDir)\wwwroot\css&#xD;&#xA;copy $(ProjectDir)\node_modules\bootstrap\dist\css\bootstrap.min.css $(ProjectDir)\wwwroot\css&#xD;&#xA;copy $(ProjectDir)\node_modules\bootstrap\dist\css\bootstrap.min.css.map $(ProjectDir)\wwwroot\css&#xD;&#xA;copy $(ProjectDir)\node_modules\bootstrap\dist\js\bootstrap.js* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(ProjectDir)\node_modules\bootstrap\dist\js\bootstrap.min.js* $(ProjectDir)\wwwroot\js&#xD;&#xA;" />
+    <Exec Command="copy $(ProjectDir)\node_modules\bootstrap\dist\css\bootstrap.css* $(ProjectDir)\wwwroot\css&#xD;&#xA;copy $(ProjectDir)\node_modules\bootstrap\dist\css\bootstrap.min.css* $(ProjectDir)\wwwroot\css&#xD;&#xA;copy $(ProjectDir)\node_modules\bootstrap\dist\js\bootstrap.js* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(ProjectDir)\node_modules\bootstrap\dist\js\bootstrap.min.js* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(ProjectDir)\node_modules\jquery\dist\jquery.js* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(ProjectDir)\node_modules\jquery\dist\jquery.min.* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(ProjectDir)\node_modules\jquery-validation\dist\jquery.validate.* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(ProjectDir)\node_modules\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.* $(ProjectDir)\wwwroot\js&#xD;&#xA;" />
   </Target>
 
 </Project>

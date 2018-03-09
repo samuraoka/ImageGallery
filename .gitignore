@@ -262,3 +262,4 @@ __pycache__/
 /ImageGallery.API/wwwroot/images
 /ImageGallery.Client/wwwroot/css/bootstrap.*
 /ImageGallery.Client/wwwroot/js/bootstrap.*
+/ImageGallery.Client/wwwroot/js/jquery.*
