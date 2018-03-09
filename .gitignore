@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /ImageGallery.API/wwwroot/images
+/ImageGallery.Client/wwwroot/css/bootstrap.*

@@ -18,4 +18,8 @@
     <ProjectReference Include="..\ImageGallery.Model\ImageGallery.Model.csproj" />
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="copy $(ProjectDir)\node_modules\bootstrap\dist\css\bootstrap.css $(ProjectDir)\wwwroot\css&#xD;&#xA;copy $(ProjectDir)\node_modules\bootstrap\dist\css\bootstrap.css.map $(ProjectDir)\wwwroot\css&#xD;&#xA;copy $(ProjectDir)\node_modules\bootstrap\dist\css\bootstrap.min.css $(ProjectDir)\wwwroot\css&#xD;&#xA;copy $(ProjectDir)\node_modules\bootstrap\dist\css\bootstrap.min.css.map $(ProjectDir)\wwwroot\css&#xD;&#xA;" />
+  </Target>
+
 </Project>
