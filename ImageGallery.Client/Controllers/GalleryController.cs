@@ -43,7 +43,6 @@ namespace ImageGallery.Client
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
         }
 
-        [HttpGet("{id}")]
         public async Task<IActionResult> EditImage(Guid id)
         {
             // call the API
