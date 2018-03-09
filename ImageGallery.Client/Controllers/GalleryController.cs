@@ -1,10 +1,12 @@
-﻿using ImageGallery.Client.Services;
+﻿using ImageGallery.Client.Models;
+using ImageGallery.Client.Services;
 using ImageGallery.Client.ViewModels;
 using ImageGallery.Model;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -151,6 +153,11 @@ namespace ImageGallery.Client
             }
 
             throw new Exception($"A problem happend while calling the API: {response.ReasonPhrase}");
+        }
+
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

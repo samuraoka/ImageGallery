@@ -41,7 +41,7 @@ namespace ImageGallery.Client
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Gallery/Error");
             }
 
             app.UseStaticFiles();
