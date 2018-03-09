@@ -1,0 +1,34 @@
+﻿@model ImageGallery.Client.ViewModels.AddImageViewModel
+
+<div class="container mt-4">
+
+    <h2>AddImage</h2>
+
+    <form asp-action="AddImage" method="post" role="form" enctype="multipart/form-data">
+
+        <div asp-validation-summary="ModelOnly" class="alert-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Title">Your image's title</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="alert-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Files">The image file</label>
+            <input asp-for="Files" type="file" class="form-control" accept=".jpg,.jpeg" />
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Add image" class="btn btn-primary" />
+        </div>
+    </form>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</div>
