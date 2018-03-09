@@ -1,5 +1,9 @@
 ﻿// Configure bundling and minification for the project.
 // More info at https://go.microsoft.com/fwlink/?LinkId=808241
+//
+// BuildBundlerMinifier
+// https://www.nuget.org/packages/BuildBundlerMinifier/
+// Install-Package BuildBundlerMinifier -Project ImageGallery.Client
 [
   {
     "outputFileName": "wwwroot/css/site.min.css",
