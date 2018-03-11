@@ -38,7 +38,7 @@ namespace ImageGallery.API.Test.Services
         }
 
         [Fact]
-        public void ShouldGetGalleryRepository()
+        public void BeRetrievedFromServiceProvider()
         {
             // Act
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository));
@@ -49,7 +49,7 @@ namespace ImageGallery.API.Test.Services
         }
 
         [Fact]
-        public void CouldGetImages()
+        public void ReturnImages()
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
@@ -62,7 +62,7 @@ namespace ImageGallery.API.Test.Services
         }
 
         [Fact]
-        public void CouldGetOrderedByTitleImages()
+        public void ReturnSortedImagesByTitle()
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
@@ -84,7 +84,7 @@ namespace ImageGallery.API.Test.Services
 
         [Theory]
         [InlineData("00000000-0000-0000-0000-000000000000")]
-        public void ShouldGetNullIfNotExist(string notExistingId)
+        public void ReturnNullIfNotExist(string notExistingId)
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
@@ -99,7 +99,7 @@ namespace ImageGallery.API.Test.Services
 
         [Theory]
         [InlineData("25320c5e-f58a-4b1f-b63a-8ee07a840bdf")]
-        public void CouldGetExistingFirstImage(string existingId)
+        public void BeAbleToReturnExistingFirstImage(string existingId)
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
@@ -118,7 +118,7 @@ namespace ImageGallery.API.Test.Services
 
         [Theory]
         [InlineData("1efe7a31-8dcc-4ff0-9b2d-5f148e2989cc")]
-        public void CouldGetExistingSecondImage(string existingId)
+        public void BeAbleToReturnExistingSecondImage(string existingId)
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
@@ -137,7 +137,7 @@ namespace ImageGallery.API.Test.Services
 
         [Theory]
         [InlineData("ae03d971-40a6-4350-b8a9-7b12e1d93d71")]
-        public void CouldGetExistingLastImage(string existingId)
+        public void BeAbleToReturnExistingLastImage(string existingId)
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
@@ -156,7 +156,7 @@ namespace ImageGallery.API.Test.Services
 
         [Theory]
         [InlineData("ae03d971-40a6-4350-b8a9-7b12e1d93d71")]
-        public void ShouldGetTrueIfImageExist(string existingId)
+        public void ReturnTrueIfImageExist(string existingId)
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
@@ -171,7 +171,7 @@ namespace ImageGallery.API.Test.Services
 
         [Theory]
         [InlineData("00000000-0000-0000-0000-000000000000")]
-        public void ShouldGetFalseIfImageNotExist(string notExistingId)
+        public void ReturnFalseIfImageNotExist(string notExistingId)
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
@@ -185,7 +185,7 @@ namespace ImageGallery.API.Test.Services
         }
 
         [Fact]
-        public void CouldAddAndSaveImageAnd()
+        public void BeAbleToSaveImage()
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
@@ -212,7 +212,7 @@ namespace ImageGallery.API.Test.Services
 
         [Theory]
         [InlineData("ae03d971-40a6-4350-b8a9-7b12e1d93d71")]
-        public void CouldNotUpdateIdAndSaveImage(string targetId)
+        public void BeAbleToUpdateIdAndSaveImage(string targetId)
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
@@ -225,7 +225,7 @@ namespace ImageGallery.API.Test.Services
 
         [Theory]
         [InlineData("ae03d971-40a6-4350-b8a9-7b12e1d93d71")]
-        public void CouldUpdateAndSaveImage(string targetId)
+        public void ShouldBeAbleToUpdateAndSaveImage(string targetId)
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
@@ -250,7 +250,7 @@ namespace ImageGallery.API.Test.Services
 
         [Theory]
         [InlineData("25320c5e-f58a-4b1f-b63a-8ee07a840bdf")]
-        public void CouldRemoveAndSaveImage(string targetId)
+        public void BeAbleToRtRemoveAndSaveImage(string targetId)
         {
             // Arrange
             var repo = server.Host.Services.GetService(typeof(IGalleryRepository)) as IGalleryRepository;
