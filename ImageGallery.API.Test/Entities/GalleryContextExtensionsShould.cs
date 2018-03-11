@@ -7,11 +7,11 @@ using Xunit;
 
 namespace ImageGallery.API.Test.Entities
 {
-    public class GalleryContextExtensionsTest
+    public class GalleryContextExtensionsShould
     {
         private readonly DbContextOptions<GalleryContext> options;
 
-        public GalleryContextExtensionsTest()
+        public GalleryContextExtensionsShould()
         {
             options = new DbContextOptionsBuilder<GalleryContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
