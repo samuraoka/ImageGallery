@@ -25,7 +25,7 @@ namespace ImageGallery.API.Test.Entities
         }
 
         [Fact]
-        public void CouldAddSeedData()
+        public void AddSeedDataToDatastore()
         {
             // Act
             using (var ctx = new GalleryContext(options))
