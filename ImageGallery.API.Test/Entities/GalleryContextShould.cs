@@ -16,12 +16,12 @@ namespace ImageGallery.API.Test.Entities
     // https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.InMemory/2.1.0-preview1-final
     // Install-Package -Id Microsoft.EntityFrameworkCore.InMemory -Project ImageGallery.API.Test
     [Collection("WebServer collection")]
-    public class GalleryContextTest
+    public class GalleryContextShould
     {
         private readonly TestServer server;
         private readonly DbContextOptions<GalleryContext> options;
 
-        public GalleryContextTest(WebServerFixture fixture)
+        public GalleryContextShould(WebServerFixture fixture)
         {
             server = fixture.Server;
 
