@@ -16,12 +16,12 @@ using Xunit.Abstractions;
 namespace ImageGallery.API.Test.Controllers
 {
     [Collection("Automapper collection")]
-    public class ImagesControllerTest : IDisposable
+    public class ImagesControllerShould : IDisposable
     {
         private TestServer server;
         private readonly ITestOutputHelper output;
 
-        public ImagesControllerTest(ITestOutputHelper output)
+        public ImagesControllerShould(ITestOutputHelper output)
         {
             this.output = output;
 
@@ -61,10 +61,18 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images")]
-        public async Task ShouldGetImages(string requestUri)
+        public async void ReturnListImages(string requestUri)
         {
             // Act
-            int numberOfImages = await GetTheNumberOfImages(requestUri);
+            int numberOfImages = -1;
+            using (var client = server.CreateClient())
+            {
+                var res = await client.GetAsync(requestUri);
+                res.EnsureSuccessStatusCode();
+                var responseString = await res.Content.ReadAsStringAsync();
+                var images = JsonConvert.DeserializeObject<IList<Image>>(responseString) as IList<Image>;
+                numberOfImages = images.Count;
+            }
 
             // Assert
             Assert.Equal(14, numberOfImages);
@@ -72,7 +80,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images", "d70f656d-75a7-45fc-b385-e4daa834e6a8")]
-        public async Task ShouldAccessGetImageMethod(string requestUri, string id)
+        public async void ExposeGetImageMethod(string requestUri, string id)
         {
             // Act
             HttpResponseMessage response = null;
@@ -89,7 +97,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images", "d70f656d-75a7-45fc-b385-e4daa834e6a8")]
-        public async Task ShouldGetImage(string requestUri, string id)
+        public async void ReturnImageForPassedId(string requestUri, string id)
         {
             // Act
             string responseString = null;
@@ -99,16 +107,16 @@ namespace ImageGallery.API.Test.Controllers
                 response.EnsureSuccessStatusCode();
                 responseString = await response.Content.ReadAsStringAsync();
             }
-            var image = JsonConvert.DeserializeObject<Model.Image>(responseString) as Model.Image;
+            var image = JsonConvert.DeserializeObject<Image>(responseString) as Image;
 
             // Assert
-            Assert.IsType<Model.Image>(image);
+            Assert.IsType<Image>(image);
             Assert.Equal(id, image.Id.ToString());
         }
 
         [Theory]
         [InlineData("api/images", "../../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
-        public async Task ShouldAccessCreateImageMethod(string requestUri, string imageFilePath)
+        public async void ExposeCreateImageMethod(string requestUri, string imageFilePath)
         {
             // Arrange
             var title = "New Image " + Guid.NewGuid().ToString();
@@ -129,7 +137,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images")]
-        public async Task ShouldGetBadRequestResponseIfContentIsEmpty(string requestUri)
+        public async void ReturnBadRequestResponseIfRequestContentEmpty(string requestUri)
         {
             // Arrange
             // Parameter Binding in ASP.NET Web API
@@ -150,7 +158,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images")]
-        public async Task ShouldGetUnsupportedMediaTypeResponseIfMessageBodyNull(string requestUri)
+        public async void ReturnUnsupportedMediaTypeResponseIfMessageBodyNull(string requestUri)
         {
             // Arrange
             HttpContent emptyContnet = null;
@@ -169,7 +177,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images", 151, "../../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
-        public async void ShouldGetUnprocessableEntityResponseIfImageTitleLengthOvers(string requestUri, int titleLength, string imageFilePath)
+        public async void ReturnUnprocessableEntityResponseIfImageTitleLengthOvers(string requestUri, int titleLength, string imageFilePath)
         {
             // Arrange
             // Best way to repeat a character in C#
@@ -195,7 +203,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images", 150, null)]
-        public async void ShouldGetUnprocessableEntityResponseIfImageBytesIsNull(string requestUri, int titleLength, string imageFilePath)
+        public async void ReturnUnprocessableEntityResponseIfImageBytesNull(string requestUri, int titleLength, string imageFilePath)
         {
             // Arrange
             // Best way to repeat a character in C#
@@ -221,7 +229,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images", "../../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
-        public async Task CouldUploadImageData(string requestUri, string imageFilePath)
+        public async void SaveImageDataToDatabase(string requestUri, string imageFilePath)
         {
             // Arrange
             // Getting the number of images before uploading.
@@ -248,7 +256,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images", "../../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
-        public async void ShouldGetSavedImageFromFileSystem(string requestUri, string imageFilePath)
+        public async void SaveImageBytesToFileSystem(string requestUri, string imageFilePath)
         {
             // Arrange
             // Creating an upload data
@@ -275,7 +283,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images")]
-        public async void ShouldBeAbleToAccessDeleteImageMethod(string requestUri)
+        public async void ExposeDeleteImageMethod(string requestUri)
         {
             // Act
             HttpResponseMessage response = null;
@@ -291,7 +299,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images", "../../../../TestData/6b32c074-65af-4f2b-9f3a-1b2d4deb7050.jpg")]
-        public async void ShouldGetNotFoundResponseIfPassesNotExistId(string requestUri, string targetId)
+        public async void ReturnNotFoundResponseForNotExistId(string requestUri, string targetId)
         {
             // Act
             HttpResponseMessage response = null;
@@ -307,7 +315,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images", "../../../../TestData/6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg")]
-        public async void ShouldBeAbleToDeleteImage(string requestUri, string imageFilePath)
+        public async void DeleteImage(string requestUri, string imageFilePath)
         {
             // Arrange
             var uploadedImage = await UploadImage(requestUri, imageFilePath);
@@ -329,13 +337,14 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images", "d70f656d-75a7-45fc-b385-e4daa834e6a8")]
-        public async void ShouldGetUnsupportedMediaTypeResponseIfRequestBodyIsNull(string requestUri, string targetId)
+        public async void ReturnUnsupportedMediaTypeResponseIfRequestBodyNull(string requestUri, string targetId)
         {
             // Act
             HttpResponseMessage response = null;
             using (var client = server.CreateClient())
             {
-                response = await client.PutAsync(string.Join("/", requestUri, targetId), null);
+                HttpContent content = null;
+                response = await client.PutAsync(string.Join("/", requestUri, targetId), content);
             }
 
             // Assert
@@ -344,12 +353,12 @@ namespace ImageGallery.API.Test.Controllers
         }
 
         [Theory]
-        [InlineData("api/images", "d70f656d-75a7-45fc-b385-e4daa834e6a8")]
-        public async void ShouldGetBadRequestResponseIfRequestBodyIsEmpty(string baseUri, string targetId)
+        [InlineData("api/images", "d70f656d-75a7-45fc-b385-e4daa834e6a8", "")]
+        public async void ReturnBadRequestResponseIfRequestBodyEmpty(string baseUri, string targetId, string content)
         {
             // Arrange
             var requestUri = string.Join('/', baseUri, targetId);
-            var requestBody = new StringContent("", Encoding.Unicode, JsonContentType);
+            var requestBody = new StringContent(content, Encoding.Unicode, JsonContentType);
 
             // Act
             HttpResponseMessage response = null;
@@ -364,12 +373,12 @@ namespace ImageGallery.API.Test.Controllers
         }
 
         [Theory]
-        [InlineData("api/images", "ab46efdb-0384-400c-89cb-95bba1c500e9")]
-        public async void ShouldGetUnprocessableEntityObjectResultIfTitleIsNull(string baseUri, string targetId)
+        [InlineData("api/images", "ab46efdb-0384-400c-89cb-95bba1c500e9", null)]
+        public async void ReturnUnprocessableEntityObjectResultIfTitleNull(string baseUri, string targetId, string title)
         {
             // Arrange
             var requestUri = string.Join('/', baseUri, targetId);
-            var requestBody = CreateUpdateImageRequestBody(null);
+            var requestBody = CreateUpdateImageRequestBody(title);
 
             // Act
             HttpResponseMessage response = null;
@@ -384,12 +393,12 @@ namespace ImageGallery.API.Test.Controllers
         }
 
         [Theory]
-        [InlineData("api/images", "ab46efdb-0384-400c-89cb-95bba1c500e9")]
-        public async void ShouldGetUnprocessableEntityObjectResultIfTitleIsEmpty(string baseUri, string targetId)
+        [InlineData("api/images", "ab46efdb-0384-400c-89cb-95bba1c500e9", "")]
+        public async void ReturnUnprocessableEntityObjectResultIfTitleEmpty(string baseUri, string targetId, string title)
         {
             // Arrange
             var requestUri = string.Join('/', baseUri, targetId);
-            var requestBody = CreateUpdateImageRequestBody("");
+            var requestBody = CreateUpdateImageRequestBody(title);
 
             // Act
             HttpResponseMessage response = null;
@@ -405,7 +414,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images", "ab46efdb-0384-400c-89cb-95bba1c500e9", 151)]
-        public async void ShouldGetUnprocessableEntityObjectResultIfTitleIsLongerThan(string baseUri, string targetId, int titleLength)
+        public async void ReturnUnprocessableEntityObjectResultIfTitleLongerThan(string baseUri, string targetId, int titleLength)
         {
             // Arrange
             var requestUri = string.Join('/', baseUri, targetId);
@@ -425,7 +434,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images", "ab4999db-0384-400c-89cb-95bba1c500ff")]
-        public async void ShouldGetNotFoundResponseIfInvalidIdProvided(string baseUri, string invalidId)
+        public async void ReturnNotFoundResponseIfInvalidIdProvided(string baseUri, string invalidId)
         {
             // Arrange
             var requestUri = string.Join('/', baseUri, invalidId);
@@ -445,7 +454,7 @@ namespace ImageGallery.API.Test.Controllers
 
         [Theory]
         [InlineData("api/images", "ab46efdb-0384-400c-89cb-95bba1c500e9", "NewImageTitle")]
-        public async void ShouldBeAbleToUpdateImage(string baseUri, string targetId, string newTitle)
+        public async void UpdateImageTitle(string baseUri, string targetId, string newTitle)
         {
             // Arrange
             var originalImage = await GetImage(baseUri, targetId);
