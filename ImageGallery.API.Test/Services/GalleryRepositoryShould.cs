@@ -7,11 +7,11 @@ using Xunit;
 
 namespace ImageGallery.API.Test.Services
 {
-    public class GalleryRepositoryTest : IDisposable
+    public class GalleryRepositoryShould : IDisposable
     {
         private TestServer server;
 
-        public GalleryRepositoryTest()
+        public GalleryRepositoryShould()
         {
             // Microsoft.AspNetCore.TestHost
             // https://www.nuget.org/packages/Microsoft.AspNetCore.TestHost/2.1.0-preview1-final
