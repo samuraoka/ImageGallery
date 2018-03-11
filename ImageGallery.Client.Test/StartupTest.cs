@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.TestHost;
 using System;
 using Xunit;
 
+//TODO refactor this test class name and method name.
 namespace ImageGallery.Client.Test
 {
     public class StartupTest : IDisposable

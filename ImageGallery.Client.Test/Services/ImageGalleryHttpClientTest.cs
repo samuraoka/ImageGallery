@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Xunit;
 
+//TODO refactor this test class name and method name.
 namespace ImageGallery.Client.Test.Services
 {
     public class ImageGalleryHttpClientTest

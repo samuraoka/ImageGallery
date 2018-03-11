@@ -1,6 +1,7 @@
 ﻿using System;
 using Xunit;
 
+//TODO refactor this test class name and method name.
 namespace ImageGallery.Model.Test
 {
     public class ImageTest

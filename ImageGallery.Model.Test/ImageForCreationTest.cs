@@ -2,6 +2,7 @@
 using Xunit;
 using System.ComponentModel.DataAnnotations;
 
+//TODO refactor this test class name and method name.
 namespace ImageGallery.Model.Test
 {
     public class ImageForCreationTest

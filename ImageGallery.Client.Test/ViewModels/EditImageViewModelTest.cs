@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Xunit;
 
+//TODO refactor this test class name and method name.
 namespace ImageGallery.Client.Test.ViewModels
 {
     public class EditImageViewModelTest

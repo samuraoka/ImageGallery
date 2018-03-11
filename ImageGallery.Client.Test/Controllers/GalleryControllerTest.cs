@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
+//TODO refactor this test class name and method name.
 namespace ImageGallery.Client.Controllers.Test
 {
     public class GalleryControllerTest

@@ -3,6 +3,7 @@ using ImageGallery.Model;
 using System.Collections.Generic;
 using Xunit;
 
+//TODO refactor this test class name and method name.
 namespace ImageGallery.Client.Test.ViewModels
 {
     public class GalleryIndexViewModelTest
