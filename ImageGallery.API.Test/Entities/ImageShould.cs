@@ -5,7 +5,7 @@ using Xunit;
 
 namespace ImageGallery.API.Test.Entities
 {
-    public class ImageTest
+    public class ImageShould
     {
         [Fact]
         public void ShouldCreateNewImageInstance()
