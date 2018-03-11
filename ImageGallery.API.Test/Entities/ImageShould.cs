@@ -8,7 +8,7 @@ namespace ImageGallery.API.Test.Entities
     public class ImageShould
     {
         [Fact]
-        public void ShouldCreateNewImageInstance()
+        public void BeCreated()
         {
             // Act
             var obj = new Image();
@@ -19,7 +19,7 @@ namespace ImageGallery.API.Test.Entities
         }
 
         [Fact]
-        public void ShouldSetGetIdProperty()
+        public void ProvideSetGetIdProperty()
         {
             // Arrange
             var newId = Guid.NewGuid();
@@ -33,7 +33,7 @@ namespace ImageGallery.API.Test.Entities
         }
 
         [Fact]
-        public void ShouldGetKeyAttributeFromIdProperty()
+        public void HaveKeyAttributeOnIdProperty()
         {
             // Arrange
             var prop = typeof(Image).GetProperty(nameof(Image.Id));
@@ -47,7 +47,7 @@ namespace ImageGallery.API.Test.Entities
         }
 
         [Fact]
-        public void ShouldSetGetTitleProperty()
+        public void ProvideSetGetTitleProperty()
         {
             // Arrange
             var newTitle = "Title value for Image";
@@ -61,7 +61,7 @@ namespace ImageGallery.API.Test.Entities
         }
 
         [Fact]
-        public void ShouldGetRequiredAttributeFromTitleProperty()
+        public void HaveRequiredAttributeOnTitleProperty()
         {
             // Arrange
             var prop = typeof(Image).GetProperty(nameof(Image.Title));
@@ -76,7 +76,7 @@ namespace ImageGallery.API.Test.Entities
 
         [Theory]
         [InlineData(150)]
-        public void ShouldGetMaxLengthAttributeFromTitleProperty(int length)
+        public void HaveMaxLengthAttributeOnTitleProperty(int length)
         {
             // Arrange
             var prop = typeof(Image).GetProperty(nameof(Image.Title));
@@ -91,7 +91,7 @@ namespace ImageGallery.API.Test.Entities
         }
 
         [Fact]
-        public void ShouldSetGetFileNameProperty()
+        public void ProvideSetGetFileNameProperty()
         {
             // Arrange
             var newFileName = "foo.jpg";
@@ -105,7 +105,7 @@ namespace ImageGallery.API.Test.Entities
         }
 
         [Fact]
-        public void ShouldGetRequiredAttributeFromFileNameProperty()
+        public void HaveRequiredAttributeOnFileNameProperty()
         {
             // Arrange
             var prop = typeof(Image).GetProperty(nameof(Image.FileName));
@@ -120,7 +120,7 @@ namespace ImageGallery.API.Test.Entities
 
         [Theory]
         [InlineData(200)]
-        public void ShouldGetMaxLengthAttributeFromFileNameProperty(int length)
+        public void HaveMaxLengthAttributeOnFileNameProperty(int length)
         {
             // Arrange
             var prop = typeof(Image).GetProperty(nameof(Image.FileName));
@@ -135,7 +135,7 @@ namespace ImageGallery.API.Test.Entities
         }
 
         [Fact]
-        public void ShouldSetGetOwnerIdProperty()
+        public void ExposeSetGetOwnerIdProperty()
         {
             // Arrange
             var newOwnerId = "999-888-777-666";
@@ -149,7 +149,7 @@ namespace ImageGallery.API.Test.Entities
         }
 
         [Fact]
-        public void ShouldGetRequiredAttributeFromOwnerIdProperty()
+        public void HaveRequiredAttributeOnOwnerIdProperty()
         {
             // Arrange
             var prop = typeof(Image).GetProperty(nameof(Image.OwnerId));
@@ -164,7 +164,7 @@ namespace ImageGallery.API.Test.Entities
 
         [Theory]
         [InlineData(50)]
-        public void ShouldGetMaxLengthAttributeFromOwnerIdProperty(int length)
+        public void HaveMaxLengthAttributeOnOwnerIdProperty(int length)
         {
             // Arrange
             var prop = typeof(Image).GetProperty(nameof(Image.OwnerId));
