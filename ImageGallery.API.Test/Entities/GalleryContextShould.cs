@@ -39,7 +39,7 @@ namespace ImageGallery.API.Test.Entities
         }
 
         [Fact]
-        public void ShouldGetGalleryContest()
+        public void BeGotFromInjectionService()
         {
             // Act
             var context = server.Host.Services.GetService(typeof(GalleryContext));
@@ -50,7 +50,7 @@ namespace ImageGallery.API.Test.Entities
         }
 
         [Fact]
-        public void ShouldGetImageDbSet()
+        public void ReturnImageDbSet()
         {
             // Act
             List<Image> images = null;
