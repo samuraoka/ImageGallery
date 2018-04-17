@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageGallery.Model", "ImageGallery.Model\ImageGallery.Model.csproj", "{3F7387E1-5359-4DC5-906F-766A27321D1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageGallery.Model", "ImageGallery.Model\ImageGallery.Model.csproj", "{3F7387E1-5359-4DC5-906F-766A27321D1A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{DF210846-9670-4BD4-9C61-3238BCB39DCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageGallery.Model.Test", "ImageGallery.Model.Test\ImageGallery.Model.Test.csproj", "{2B0697C3-31C9-4074-8088-0232930A50C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageGallery.Model.Test", "ImageGallery.Model.Test\ImageGallery.Model.Test.csproj", "{2B0697C3-31C9-4074-8088-0232930A50C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageGallery.API", "ImageGallery.API\ImageGallery.API.csproj", "{BE567B4D-1B77-4FA7-AEA8-02F15D626C3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageGallery.API", "ImageGallery.API\ImageGallery.API.csproj", "{BE567B4D-1B77-4FA7-AEA8-02F15D626C3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageGallery.API.Test", "ImageGallery.API.Test\ImageGallery.API.Test.csproj", "{5BB2B215-4865-4CE2-94C0-7F667C2E0599}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageGallery.API.Test", "ImageGallery.API.Test\ImageGallery.API.Test.csproj", "{5BB2B215-4865-4CE2-94C0-7F667C2E0599}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageGallery.Client", "ImageGallery.Client\ImageGallery.Client.csproj", "{A0018C00-0E64-4232-BDCC-F1694D879A3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageGallery.Client", "ImageGallery.Client\ImageGallery.Client.csproj", "{A0018C00-0E64-4232-BDCC-F1694D879A3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageGallery.Client.Test", "ImageGallery.Client.Test\ImageGallery.Client.Test.csproj", "{22AFD844-C8A4-456D-BC64-697A09E47C84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageGallery.Client.Test", "ImageGallery.Client.Test\ImageGallery.Client.Test.csproj", "{22AFD844-C8A4-456D-BC64-697A09E47C84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marvin.IDP", "Marvin.IDP\Marvin.IDP.csproj", "{183C5E27-BA0F-4E78-A817-DE647024AB5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{22AFD844-C8A4-456D-BC64-697A09E47C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22AFD844-C8A4-456D-BC64-697A09E47C84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22AFD844-C8A4-456D-BC64-697A09E47C84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{183C5E27-BA0F-4E78-A817-DE647024AB5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{183C5E27-BA0F-4E78-A817-DE647024AB5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{183C5E27-BA0F-4E78-A817-DE647024AB5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{183C5E27-BA0F-4E78-A817-DE647024AB5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
