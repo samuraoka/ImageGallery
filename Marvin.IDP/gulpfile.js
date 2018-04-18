@@ -1,4 +1,5 @@
-﻿"use strict";
+/// <binding BeforeBuild='default' />
+"use strict";
 
 /*
 This file is the main entry point for defining Gulp tasks and using Gulp plugins.
