@@ -267,3 +267,7 @@ __pycache__/
 /ImageGallery.Client/wwwroot/js/site.addImage.min.js
 /ImageGallery.Client/wwwroot/js/site.index.min.js
 /ImageGallery.Client/wwwroot/js/site.min.js
+/Marvin.IDP/tempkey.rsa
+/Marvin.IDP/wwwroot/css/bootstrap*
+/Marvin.IDP/wwwroot/js/bootstrap*
+/Marvin.IDP/wwwroot/js/jquery*
