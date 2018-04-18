@@ -5,11 +5,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="client\css\site.css" />
+    <None Remove="client\css\site.less" />
+    <None Remove="client\css\site.min.css" />
+    <None Remove="client\js\signout-redirect.js" />
     <None Remove="tempkey.rsa" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="client\css\site.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="client\css\site.less">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="client\css\site.min.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="client\js\signout-redirect.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
   <ItemGroup>
