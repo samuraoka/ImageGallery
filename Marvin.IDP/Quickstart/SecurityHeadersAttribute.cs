@@ -32,6 +32,13 @@ namespace IdentityServer4.Quickstart.UI
                 //csp += "upgrade-insecure-requests;";
                 // also an example if you need client images to be displayed from twitter
                 // csp += "img-src 'self' https://pbs.twimg.com;";
+                //
+                // Content Security Policy Level 2
+                // http://www.w3.org/TR/CSP2/
+                //
+                // Content-Security-Policy (CSP): how to allow svg image in object
+                // https://stackoverflow.com/questions/46408595/content-security-policy-csp-how-to-allow-svg-image-in-object
+                csp += "img-src 'self' data:;";
 
                 // once for standards compliant browsers
                 if (!context.HttpContext.Response.Headers.ContainsKey("Content-Security-Policy"))
