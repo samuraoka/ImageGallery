@@ -33,6 +33,15 @@ gulp.task('min:css', ['scss:css'], function () {
         .pipe(gulp.dest('./client/css/dist/'));
 });
 
+gulp.task('copy:css', ['scss:css', 'min:css'], function () {
+    var sourceFiles = [
+        '../node_modules/bootstrap/dist/css/*',
+        'client/css/dist/*'
+    ];
+    return gulp.src(sourceFiles)
+        .pipe(gulp.dest('wwwroot/css'));
+});
+
 gulp.task('copy:js', function () {
     var sourceFiles = [
         '../node_modules/bootstrap/dist/js/*',
@@ -41,15 +50,6 @@ gulp.task('copy:js', function () {
     ];
     return gulp.src(sourceFiles)
         .pipe(gulp.dest('wwwroot/js'));
-});
-
-gulp.task('copy:css', ['scss:css', 'min:css'], function () {
-    var sourceFiles = [
-        '../node_modules/bootstrap/dist/css/*',
-        'client/css/dist/*'
-    ];
-    return gulp.src(sourceFiles)
-        .pipe(gulp.dest('wwwroot/css'));
 });
 
 // The default task (called when you run `gulp` from cli)
