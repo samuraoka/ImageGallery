@@ -15,7 +15,23 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     concat = require("gulp-concat"),
     cssmin = require("gulp-cssmin"),
-    gulpCopy = require('gulp-copy');
+    rename = require("gulp-rename");
+
+gulp.task('scss:css', function () {
+    var sourceFiles = [
+        './client/css/*.scss'
+    ];
+    return gulp.src(sourceFiles)
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest('./client/css/dist'));
+});
+
+gulp.task('min:css', ['scss:css'], function () {
+    return gulp.src('./client/css/dist/*.css')
+        .pipe(cssmin())
+        .pipe(rename({suffix:'.min'}))
+        .pipe(gulp.dest('./client/css/dist/'));
+});
 
 gulp.task('copy:js', function () {
     var sourceFiles = [
@@ -27,7 +43,14 @@ gulp.task('copy:js', function () {
         .pipe(gulp.dest('wwwroot/js'));
 });
 
-// The default task (called when you run `gulp` from cli)
-gulp.task('default', ['copy:js'], function () {
-    // place code for your default task here
+gulp.task('copy:css', ['scss:css', 'min:css'], function () {
+    var sourceFiles = [
+        '../node_modules/bootstrap/dist/css/*',
+        'client/css/dist/*'
+    ];
+    return gulp.src(sourceFiles)
+        .pipe(gulp.dest('wwwroot/css'));
 });
+
+// The default task (called when you run `gulp` from cli)
+gulp.task('default', ['copy:js', 'copy:css'], function () {});

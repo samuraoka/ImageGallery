@@ -5,23 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="client\css\site.css" />
-    <None Remove="client\css\site.less" />
-    <None Remove="client\css\site.min.css" />
     <None Remove="client\js\signout-redirect.js" />
     <None Remove="tempkey.rsa" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="client\css\site.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="client\css\site.less">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="client\css\site.min.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
     <Content Include="client\js\signout-redirect.js">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -37,9 +25,5 @@
     <PackageReference Include="IdentityServer4" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
   </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="copy $(SolutionDir)\node_modules\bootstrap\dist\css\bootstrap.css* $(ProjectDir)\wwwroot\css&#xD;&#xA;copy $(SolutionDir)\node_modules\bootstrap\dist\css\bootstrap.min.css* $(ProjectDir)\wwwroot\css&#xD;&#xA;copy $(SolutionDir)\node_modules\bootstrap\dist\js\bootstrap.js* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(SolutionDir)\node_modules\bootstrap\dist\js\bootstrap.min.js* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(SolutionDir)\node_modules\jquery\dist\jquery.js* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(SolutionDir)\node_modules\jquery\dist\jquery.min.* $(ProjectDir)\wwwroot\js&#xD;&#xA;" />
-  </Target>
 
 </Project>
