@@ -5,6 +5,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="client\css\site.scss" />
+    <None Remove="client\js\site.addImage.js" />
+    <None Remove="client\js\site.index.js" />
+    <None Remove="client\js\site.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="client\css\site.scss">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="client\js\site.addImage.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="client\js\site.index.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="client\js\site.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.6.362" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
@@ -17,9 +39,5 @@
   <ItemGroup>
     <ProjectReference Include="..\ImageGallery.Model\ImageGallery.Model.csproj" />
   </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="copy $(SolutionDir)\node_modules\bootstrap\dist\css\bootstrap.css* $(ProjectDir)\wwwroot\css&#xD;&#xA;copy $(SolutionDir)\node_modules\bootstrap\dist\css\bootstrap.min.css* $(ProjectDir)\wwwroot\css&#xD;&#xA;copy $(SolutionDir)\node_modules\bootstrap\dist\js\bootstrap.js* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(SolutionDir)\node_modules\bootstrap\dist\js\bootstrap.min.js* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(SolutionDir)\node_modules\jquery\dist\jquery.js* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(SolutionDir)\node_modules\jquery\dist\jquery.min.* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(SolutionDir)\node_modules\jquery-validation\dist\jquery.validate.* $(ProjectDir)\wwwroot\js&#xD;&#xA;copy $(SolutionDir)\node_modules\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.* $(ProjectDir)\wwwroot\js&#xD;&#xA;" />
-  </Target>
 
 </Project>

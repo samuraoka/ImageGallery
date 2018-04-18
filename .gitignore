@@ -260,13 +260,10 @@ paket-files/
 __pycache__/
 *.pyc
 /ImageGallery.API/wwwroot/images
-/ImageGallery.Client/wwwroot/css/bootstrap.*
-/ImageGallery.Client/wwwroot/js/bootstrap.*
-/ImageGallery.Client/wwwroot/js/jquery.*
-/ImageGallery.Client/wwwroot/css/site.min.css
-/ImageGallery.Client/wwwroot/js/site.addImage.min.js
-/ImageGallery.Client/wwwroot/js/site.index.min.js
-/ImageGallery.Client/wwwroot/js/site.min.js
+/ImageGallery.Client/client/css/dist
+/ImageGallery.Client/client/js/dist
+/ImageGallery.Client/wwwroot/css/*
+/ImageGallery.Client/wwwroot/js/*
 /Marvin.IDP/tempkey.rsa
 /Marvin.IDP/wwwroot/js/*
 /Marvin.IDP/wwwroot/css/*
