@@ -13,9 +13,10 @@ Click here to learn more. https://go.microsoft.com/fwlink/?LinkId=518007
 // https://www.npmjs.com/package/gulp
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
-    concat = require("gulp-concat"),
-    cssmin = require("gulp-cssmin"),
-    rename = require("gulp-rename");
+    cssmin = require('gulp-cssmin'),
+    jsmin = require('gulp-jsmin'),
+    rename = require('gulp-rename'),
+    copy = require('gulp-copy');
 
 gulp.task('scss:css', function () {
     var sourceFiles = [
@@ -29,27 +30,35 @@ gulp.task('scss:css', function () {
 gulp.task('min:css', ['scss:css'], function () {
     return gulp.src('./client/css/dist/*.css')
         .pipe(cssmin())
-        .pipe(rename({suffix:'.min'}))
-        .pipe(gulp.dest('./client/css/dist/'));
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest('./client/css/dist'));
 });
 
 gulp.task('copy:css', ['scss:css', 'min:css'], function () {
     var sourceFiles = [
         '../node_modules/bootstrap/dist/css/*',
-        'client/css/dist/*'
+        './client/css/dist/*'
     ];
     return gulp.src(sourceFiles)
-        .pipe(gulp.dest('wwwroot/css'));
+        .pipe(gulp.dest('./wwwroot/css'));
 });
 
-gulp.task('copy:js', function () {
+gulp.task('min:js', function () {
+    return gulp.src('./client/js/*.js')
+        .pipe(copy('./client/js/dist', { prefix: 2 }))
+        .pipe(jsmin())
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest('./client/js'));
+});
+
+gulp.task('copy:js', ['min:js'], function () {
     var sourceFiles = [
         '../node_modules/bootstrap/dist/js/*',
         '../node_modules/jquery/dist/*',
-        'client/js/*'
+        './client/js/dist/*'
     ];
     return gulp.src(sourceFiles)
-        .pipe(gulp.dest('wwwroot/js'));
+        .pipe(gulp.dest('./wwwroot/js'));
 });
 
 // The default task (called when you run `gulp` from cli)
